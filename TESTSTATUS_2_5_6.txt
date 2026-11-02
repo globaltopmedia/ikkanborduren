@@ -1,0 +1,14 @@
+Teststatus 2.5.6 — 1 november 2026
+
+Geslaagd:
+- ZIP-bron kon volledig worden uitgepakt en oorspronkelijke ZIP-integriteit was goed.
+- Python compileall op de bronbestanden.
+- Gerichte unitcontrole van de nieuwe tatami-rijgenerator met een minimale teststub: afwisselende rijfase en steeklengtes gecontroleerd.
+
+Niet uitgevoerd:
+- Volledige pytest-suite: pyembroidery ontbreekt.
+- GUI-start en installatie: PySide6 ontbreekt; geen Windows-desktop beschikbaar.
+- PES/EXP export en heropenen: pyembroidery ontbreekt.
+- Fysieke borduurtest: niet uitgevoerd.
+
+Deze build is een gerichte softwarecorrectie, geen garantie dat ieder ontwerp of iedere stof zonder proefborduring goed werkt.

@@ -1,0 +1,13 @@
+BorduurStudio — proefpatroon
+Maat: 80.0 x 80.5 mm
+Steken: 35005
+1. #FCF3D6 Kleur 1
+2. #FAE8B4 Kleur 2
+3. #1FCBEE Kleur 3
+4. #64CB7C Kleur 4
+5. #7DC94A Kleur 5
+6. #74707F Kleur 6
+7. #031754 Kleur 7
+8. #001351 Kleur 8
+
+Eerst proefborduren met passende versteviging.

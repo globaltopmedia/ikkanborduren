@@ -1,0 +1,9 @@
+Ikkanborduren 2.5.7 — aanpassing vulling
+
+- Standaard rijafstand in het scherm verlaagd van 0,45 naar 0,35 mm.
+- Standaard stofprofiel en badstofprofiel op 0,35 mm gezet.
+- Tatami-generator laat nu maximaal 5,0 mm vulsteeklengte toe (was intern begrensd op 4,5 mm).
+- Toegevoegde gerichte test voor 5,0 mm maximum.
+
+Let op: de rijafstand is niet hetzelfde als de steeklengte. Meer steken per oppervlak kan meer draadbelasting geven. Test op dezelfde stof met passende versteviging.
+De machine-draadspanning wordt niet door PES/EXP-software ingesteld; controleer bovendraad, spoelhuis, naald en inrijgen volgens de BERNINA-handleiding.

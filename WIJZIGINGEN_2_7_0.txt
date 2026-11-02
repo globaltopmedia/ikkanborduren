@@ -1,0 +1,48 @@
+Ikkanborduren 2.7.0 — onderdelen aanklikken en aanpassen (november 2026)
+
+Naar aanleiding van ervaringen van een gebruiker tijdens het borduren. Zie hoofdstuk 3 t/m 5
+van HANDLEIDING.html.
+
+1. Onderdeel aanklikken en laten oplichten
+   Met "Selecteren met slepen" één klik op een deel van het borduursel (ook een
+   dunne lijn): het onderdeel licht roze/geel op in de tekening, wordt
+   gemarkeerd in de kolom Borduuronderdelen en in de lijst Garenkleuren (met ▶).
+   Ctrl+klik voegt toe. Klik op een garenkleur: alle onderdelen in die kleur
+   lichten op. De garenkleurenlijst toont nu welke onderdelen bij elke kleur horen.
+
+2. Direct aanpassen (vak "Geselecteerd onderdeel aanpassen" in de kolom)
+   Kleur van alleen dit onderdeel, steeksoort, steekrichting, gat maken/sluiten,
+   alle gaten dicht. De steken worden meteen opnieuw gemaakt (uit te zetten).
+   "Garenkleur wijzigen" past nu ook de onderdelen aan, zodat de kleur bewaard
+   blijft bij opnieuw steken maken.
+
+3. Dunne lijnen worden gevuld
+   Oorzaak: tatami sloeg rijen korter dan ca. 1,5 mm over, waardoor lijnen die
+   dwars op de steekrichting liepen leeg bleven. Nu krijgen dunne lijnen en
+   smalle stukken in een tatamivlak automatisch een satijnsteek die de lijn
+   volgt. Een dunne lijn wordt in één doorgaande beweging geborduurd
+   (stiklijn door het midden als onderlaag, daarna satijn erover).
+
+4. Nieuwe steeksoorten
+   - Satijnsteek — volgt de vorm (lijnen, smalle delen)
+   - Satijnvulling — van rand tot rand in de steekrichting
+   - "Satijn langs contour" heet nu "Satijnrand langs de contour".
+   Automatisch borduren en de toverstaf kiezen: hele dunne lijn = stiklijn,
+   lijn tot 3,5 mm = satijnsteek, lijnenwerk met dikke stukken = tatami met
+   satijn op de lijnen, smal vlak = satijnvulling, breed = tatami.
+
+5. Richtingspijlen
+   Zet op meerdere plekken pijlen in de gewenste steekrichting en druk Enter.
+   Vlakken worden per pijl verdeeld (gemeten langs de vorm); bij een lijn
+   bepalen de pijlen hoe schuin de satijn plaatselijk ligt. Rechtsklik
+   verwijdert een pijl; toegepaste pijlen blijven bewaard in het project.
+
+6. Groeperen (Ctrl+G) en groep losmaken (Ctrl+Shift+G)
+   Klik op een onderdeel van een groep kiest de hele groep; Alt+klik kiest één.
+
+7. Mes (sneltoets K)
+   Trek een lijn over een vlak: het vlak wordt langs die lijn gesplitst in
+   zelfstandige onderdelen met dezelfde instellingen. Geen spleet langs de snede.
+
+Eerst proefborduren op een restje stof: 2.7.0 is nog niet op Windows of op een
+echte Bernina 540 getest.

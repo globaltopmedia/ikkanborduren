@@ -1,0 +1,16 @@
+IK KAN BORDUREN — versie 2.5.6-tatami-overlap
+Datum: 1 november 2026
+
+Aanpassingen naar aanleiding van de proefborduring:
+1. Tatami-vulling gebruikt nu een afwisselende halve steekafstand voor de tussenliggende naaldpenetraties in opeenvolgende rijen. Hierdoor staan de steekpunten niet meer in dezelfde rechte kolommen.
+2. De vulrand krijgt een compensatie van 0,2 mm zodat de vulling onder de later te borduren contour kan vallen. De contour moet als bovenste/laatste laag worden ingesteld om de rand netjes af te dekken.
+3. Kleine en smalle fragmenten worden niet langer met een dichte onderlaag gevuld. Onderlaag wordt alleen toegevoegd aan voldoende grote vlakken en met ruimere rijafstand.
+4. De vulrijgenerator slaat fragmenten smaller dan 1,2 mm over om ophopingen van korte steken te beperken.
+
+Controle:
+- Python-syntaxiscontrole van alle .py-bestanden: wordt uitgevoerd bij deze build.
+- Gerichte controle van de vulrijgenerator: wordt uitgevoerd bij deze build.
+- Volledige applicatie- en PES/EXP-roundtriptests kunnen in deze omgeving niet worden uitgevoerd omdat PySide6 en pyembroidery niet beschikbaar zijn en internetinstallatie niet mogelijk is.
+- Machineproef op BERNINA 540 is niet uitgevoerd. Eerst op proeflapje met juiste versteviging testen.
+
+Let op: de buitencontour wordt niet automatisch herkend als aparte bovenlaag bij ieder bronbestand. Zet de contour in de objectvolgorde na de vulling. De 0,2 mm overlap zorgt dat de vulling eronder doorloopt.

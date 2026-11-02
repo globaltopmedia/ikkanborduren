@@ -1,0 +1,9 @@
+BorduurStudio — proefpatroon
+Maat: 50.0 x 87.0 mm
+Steken: 4136
+1. #EE3B24 Rode buitenring
+2. #FF9629 Oranje ring
+3. #FFE223 Gele ring
+4. #168954 Steel
+
+Eerst proefborduren met passende versteviging.

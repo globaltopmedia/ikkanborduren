@@ -1,0 +1,10 @@
+Teststatus BorduurStudio 2.5.5
+
+- ZIP-bronpakket uitgepakt: ja
+- Gewijzigde Python-bron syntactisch gecontroleerd: zie buildcontrole
+- Volledige applicatietests: niet uitvoerbaar in de huidige omgeving (PySide6 en pyembroidery ontbreken)
+- EXP/PES round-trip: niet getest
+- BERNINA 540 machineproef: niet uitgevoerd
+- Kleurenlogica: niet gewijzigd in deze patch
+
+Voordat dit als definitieve machineklare versie wordt beschouwd, moeten de volledige tests worden uitgevoerd in de bedoelde Windows-omgeving en moet een proefborduursel worden gemaakt.

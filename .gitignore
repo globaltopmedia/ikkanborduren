@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+foutmelding.txt
+.claude/settings.local.json
+.DS_Store

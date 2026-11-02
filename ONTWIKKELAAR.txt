@@ -1,0 +1,175 @@
+BorduurStudio 2.5.2 — 9 oktober 2026
+
+Leesbare broncode voor zelfstandig Windows/Linux desktopprogramma.
+Start: python main.py. Installatie op de Windows-laptop: py installeren.py.
+V2 wordt naast V1 gezet in %USERPROFILE%\BorduurStudio25; de korte omgeving
+%USERPROFILE%\bsenv wordt hergebruikt. Geen netwerkverkeer met ontwerpen.
+
+modules:
+main.py: oorspronkelijke beeld-/steekeditor, start nu Studio2.
+studio2.py: vectorobjecten, curve-/hoekpunten, gaten, objectbewerkingen, simulatie.
+design.py: eigen cubic-contourmodellering, rastervorming op 0,1 mm, objectrouting,
+beeldopschoning, trace, SVG, ringoverschrijdingen.
+core.py: kleuren, rasterdigitizing, EXP/PES + INF/BMP en projectbestand.
+windows_setup.py: lokale Windows-snelkoppeling; verandert geen beveiligingsinstelling.
+
+Tests: python -m pip install pytest
+       python -m pytest -q
+Zonder scherm: QT_QPA_PLATFORM=offscreen
+138 regressietests voor bestaande editor en nieuwe objectfuncties. Daarnaast
+werkende conversie van de meegeleverde schildpad naar 49 vlakken, 10.088 punten.
+Tests uitgevoerd met Python 3.12, PySide6 6.11.2, Pillow 12.3.0, numpy 2.3.5,
+scipy 1.17.0, contourpy 1.3.3, pyembroidery 1.5.1 op Linux.
+Geen fysieke Bernina/Brother borduurtest, geen Windows-test van deze V2-update.
+
+Een "smooth" node krijgt een lokale begrensde tangent; linkerklik is corner.
+Ringen zijn gesloten cubic/line paden; gaten gebruiken evenodd in SVG en canvas.
+De vulling maakt een 0,1 mm masker uit deze vectorpaden; lijnsteken resamplen
+op de ingestelde lengte. Tatami werkt met parallelle scanlijnen en onderlaag.
+Satijn volgt een binnencontourband, geen tweerails-kolomvulling. Vulkruisen worden
+alleen geplaatst als hun volledige diagonalen in het masker liggen.
+De export splitst op 4,8 mm en controleert EUCLIDISCHE afstand na teruglezen.
+Eindpuntafronding kan de nominale lengte iets veranderen maar blijft <=5 mm.
+
+Routing kiest huidige kleur eerst, daarna kortste beschikbare entry/reverse.
+Overlappende vlakmaskers geven laagafhankelijkheden; open lijnen gebruiken bbox. Onderlaag voor top; rand
+na fill. Maskercontrole bewaart gaten; open-lijn-bbox is conservatief.
+Geen garantie op de globale optimale tour. SVG-import gaat via raster; getekende
+SVG-export bewaart de cubic curves en gaten. Projecten bewaren vectorobjecten,
+steekeigenaars en route-extras; V1-projecten blijven leesbaar.
+
+Raamgrenzen zijn conservatieve ellipse/rectangle-benaderingen. Mega 150x400
+is een ONTWERPBEREIK; geen positiedeling/registratie/besturing. V2 blokkeert
+export van Mega-ontwerpen hoger dan 251 mm. Eigen maat is geen route om de
+machinegrens te vergroten. Proefborduur met juiste ring en versteviging.
+Geen ART, voorgedigitaliseerde borduuralfabetten, stofsimulatie, 3D-puff of volledige
+BERNINA DesignerPlus functies. Zelfstandige implementatie zonder BERNINA-code.
+
+Externe bibliotheken behouden hun eigen licenties: Qt for Python/PySide6,
+Pillow, NumPy, SciPy, contourpy, pyembroidery.
+
+Wilcom-documentatie vergeleken: links=hoek/rechts=curve/Enter sluiten,
+Ctrl 15 graden, open enkel/triple run, nodes toevoegen/verwijderen en reshape.
+Zelfstandige implementatie. Geen automatische Branching, native EMB,
+Turning Satin of automatische overlapverwijdering.
+
+V2.1: extra_ui.py voegt Letters, Volgorde en directe USB-export toe.
+lettering.py rasteriseert QPainterPath-glyphs van geïnstalleerde fonts op 0,1 mm,
+behoudt gaten, plaatst/roteert letters op een cirkelboog en bewaart bewerkbare
+lettervlakken met groepsmetadata. Geen shaping/ligatuurengine voor complete
+schriften, geen vooraf gedigitaliseerde borduurfonts; gericht op losse letters.
+sequence.py herordent volledige kleurblokken met absolute coördinaten,
+expliciete startjump en behoud van kleuren/steekeigenaars.
+usb_export.py genereert lokaal, schrijft alle bestanden naar tijdelijke namen,
+verplaatst bestaande bestanden naar backups en herstelt ze bij schrijffouten.
+Geen garantie bij fysieke verwijdering/stroomverlies midden in de writeback.
+Handmatig: objectvolgorde is vast, kortste entry binnen een object blijft mogelijk.
+Stiklijnen verdelen steken opnieuw tussen hoekpunten om grid-resten te vermijden.
+
+V2.2: fabric.py bevat conservatieve eigen startprofielen; fabric_ui.py vraagt
+voor alle UI-opslag om stof, met asynchrone regeneratie vóór machine-export.
+Een fingerprint beschermt handmatige steekbewerkingen: behoud of regeneratie.
+Geen reverse-digitizing van bestaande machinebestanden. Notitie en werkelijk
+toegepast profiel worden apart opgeslagen en in de kleurenlijst genoemd.
+Onderlaag: contourstiklijn en optioneel grove gesplitste scanlijnvulling, met
+maskercontrole voor gaten, kleine vlakken en maximale steeklengte.
+Routing maakt units per vlak/letter. Letterparts worden klein vóór grootste
+body geordend; unitafhankelijkheden beschermen laagvolgorde. Explicit fase
+point-first / straight-last beïnvloedt overlappende units in automatische stand.
+Korte interne verbindingen <=2 mm worden alleen genaaid als een .1 mm mask
+check de gehele verbinding binnen het vlak vindt. Geen garantie globale TSP.
+Voorbeeld schildpad: 534 -> 410 jumps, 2320 -> 2249 mm travel zonder extra
+stofonderlaag; grootste sprong kan door volledige units iets toenemen.
+96 tests inclusief vijf stoffen x drie fills, pure satin-underlay, holes,
+dots vóór stems, volledige letters, overlappende units en save-failure/cancel.
+
+V2.3: advanced_ui.py, advanced_canvas.py en part_geometry.py verzorgen docks,
+lasso, hoekhandvat, contourselectie, native vormen, geïsoleerde kleurcomponenten
+en werkelijke genaaide begin/eindpunten uit owners. generation_scope wordt in
+projecten en geschiedenis opgeslagen en bij iedere latere generatie gerespecteerd.
+Motieven worden geheel binnen het masker geplaatst, maximaal 3000 cellen per
+vlak. Sterren gaan per straal centrum-tip-centrum; geen genaaide connectors
+tussen motieven. Open satijn/zigzagbanden gebruiken een centreline met normals
+en waar nodig een centreline-onderlaag. Closed satijn blijft een contourband.
+Reverse bewaart harde onderlaag/top-prioriteiten; exacte swap is daardoor niet
+voor elk samengesteld vlak mogelijk. Stage-records voorkomen een herhaalde
+lineaire scan per routekandidaat. Nieuwe tests gebruiken ook echte Qt-muisacties.
+
+V2.4: selection_edit.py provides rectangular mouse selection, grouped owner/stitch transforms,
+clipboard image import, independent thread changes for selected points, size controls,
+physical raster transforms with saved image_offset, and compact layout. action_icons.py
+provides vector icons with text labels. Existing stitch edits default to preservation
+in the fabric dialog via manual_selection_edit metadata. New targeted Qt tests cover
+real mouse drags, image rotation, isolated recoloring, export, clipboard, undo/redo,
+project roundtrip and a 1024-pixel-wide window. No physical Windows/machine test.
+
+V2.5.1: import fixes for local files copied from Explorer/Downloads.
+QMimeData local file URLs are decoded with the existing image/SVG reader;
+bitmap clipboard content remains supported. Invalid, missing or multiple
+files and cancelled replacement leave the previous design unchanged.
+File opening starts in Qt's Downloads location; imports re-enable the
+artwork preview. Regression checks include Unicode filenames, transparent
+PNG, SVG, a hidden preview and undo restoring the previous objects/stitches.
+
+V2.5.2: steekrichting voor één vlak, geselecteerde vlakken of het hele ontwerp.
+Tabblad Steekrichting en een toolbaractie blijven bereikbaar met gesloten docks.
+DirectionSpinBox interpreteert de invoer voor Return/numerieke Enter, inclusief
+lokale decimale komma. Preview en muisslepen wijzigen de hoek pas bij toepassen;
+de checkpoint staat vóór de wijziging, zodat één Undo vlakken én steken herstelt.
+De normale achtergrondworker maakt direct nieuwe steken zonder bevestigingsdialoog.
+Steken worden zichtbaar gezet en simulatie wordt uitgeschakeld voor de hele preview.
+Alle vlakken heft een eerdere generation_scope op; selectie houdt andere hoeken.
+Een geselecteerd vlak buiten de oude scope wordt aan de uitvoer toegevoegd.
+Nieuwe ontwerpen en GUI-vlakinstellingen starten op 45 graden. Bestaande
+projecthoeken blijven behouden; oude objects zonder hoek houden hun legacy 0 graden.
+Ctrl+9 en Ctrl+1 passen 90 en 180 graden toe op hetzelfde gekozen bereik.
+De richting geldt voor de vulling; contouronderlagen en connectors volgen hun
+eigen route. Nieuwe generatie kan handmatige puntbewerkingen vervangen; Undo
+bewaart het vorige patroon exact. De richting is geen rotatie van de tekening.
+Test_direction.py: 23 tests van echte Qt-toetsen, muisslepen, workerresultaten,
+steekgeometrie, Undo/Redo, scope, rastertrace en projectherstel.
+Validatie 2.5.2: 45/45 tests voor richting en advanced UI; 92/92 resterende
+regressies voor opslaan, export, stofprofielen, import, gaten en selectie.
+De eerdere core/design/continuous-regressies zijn ook geslaagd. Een oude
+USB-test wachtte op de nieuwe naamdialoog; test_extras.py beantwoordt die nu
+expliciet. De naam- en annuleercontroles blijven apart in test_save_names.py.
+Uitgevoerd met Python 3.12.14 en PySide6 6.12.0 op Linux/offscreen, zonder
+fysieke Windows-installatie of Bernina-borduurtest.
+
+V2.6.0: pro_tools.py (zonder Qt) en pro_ui.py (mixin ProUI, tab Extra, tweede
+toolbar). Toverstaf: wand_region = RGB-afstand tot klikkleur, aaneengesloten
+label, open/close-afvlakking, kleine gaten dicht, daarna objects_from_art.
+auto_objects = prepare_image + clean_art + objects_from_art + choose_fill
+(breedte = 2 x max distance transform: <1 mm run, <=8 mm satijn, groot = applicatie).
+design.drop_short_stitches verwijdert interne punten < min_stitch zonder
+steken > 4,8 mm te maken; owners blijven gelijk; fingerprint daarna.
+Rand: border_objects; contour = EDT-dilatatie + closing tegen kruisende satijn
+in binnenhoeken; satijn als open lus (centreline), stiklijnen als gesloten vlak.
+Objecten krijgen border=True en stitch_phase 2. Nieuwe vulling 'double'.
+'applique': under = plaatsingslijn, top = vastzetten (stop_before), satin =
+dekrand (stop_before). stop_before forceert TRIM + COLOR_CHANGE met dezelfde
+kleur en thread_note. Gaten: dekrand verschoven (_offset_ring) zodat hij
+0,5 mm over de snijrand valt. Raamtekening: HOOP_DRAWINGS; veld exact, frame
+illustratief. Ware grootte = logicalDotsPerInch / 254 (scene 0,1 mm).
+Bekende basislijn vóór 2.6.0 (Python 3.14, PySide6 6.12.0 op macOS): 23 falende
+tests (randprecisie gaten/tatami na 2.5.6–2.5.7, test_gui leeg palet) + 4 errors.
+
+V2.7.0: line_fill.py (zonder Qt): Zhang-Suen thinning + trapjescorrectie,
+skeleton_graph (knopen = clusters eind/kruispunten), prune van uitlopers,
+column_paths = DFS over het skelet: heen stiklijn (onderlaag/verborgen
+verplaatsing), terug satijn; satin_points meet de breedte per monster langs de
+(eventueel door pijlen gekantelde, max 60°) normaal. split_narrow: opening via
+distance transforms; smaller dan 2 x narrow_mm (standaard 1,8 mm) = satijnlijn.
+design: nieuwe vullingen 'column' en 'satin_fill', taak-sleutel max_stitch
+(4,8 mm), direction_guides [{x,y,angle}] -> _guided_tasks (geodesische
+Voronoi-indeling via scipy csgraph.dijkstra op 0,4 mm-raster, delen 0,3 mm
+overlappend, via _mask_shapes weer vlakken). split_object = mes (raster,
+snijlijn 0,2 mm, delen terug-gedilateerd). transform_object/transform_edit
+draaien pijlen mee. part_edit_ui.py (mixin PartEditUI, eerste in MRO, maar
+Studio2 roept draw_part_overlay/_sync_part_box/after_object_edit expliciet aan
+omdat Studio2 zelf refresh/sync_object_controls definieert). PartCanvas
+vervangt SelectionCanvas (pijlen-, mesmodus). group_id/group_name op objecten.
+pro_tools.choose_fill: <=0,6 run, <=3,5 column, >=50% smal = fill+narrow_mm 3,5,
+<=8 satin_fill, anders fill. Tests: test_part_edit.py. Basislijn onveranderd
+(23 falend + 4 errors, zelfde set).
+

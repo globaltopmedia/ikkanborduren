@@ -1,0 +1,42 @@
+IKKANBORDUREN 2.7.0 — Windows-pakket
+======================================
+
+Lees HANDLEIDING.html (dubbelklikken) voor alle functies en hoe je ze gebruikt.
+Nieuw in 2.7: onderdeel aanklikken (licht op) en direct aanpassen, dunne lijnen
+worden gevuld met satijn die de lijn volgt, richtingspijlen, groeperen en het mes.
+Nieuw in 2.6: toverstaf, automatisch borduren, rand rondom het ontwerp,
+dubbele stiklijn, applicaties en het borduurraam op ware grootte.
+
+Installeren
+1. Pak het zip-bestand (Ikkanborduren_2.7.0_Windows.zip) volledig uit naar een vaste map op de laptop.
+2. Installeer Python 3.13 (64-bit) vanaf https://www.python.org/downloads/windows/ als dat nog niet aanwezig is.
+   Vink tijdens de installatie 'Add Python to PATH' aan.
+3. Dubbelklik op Installatie_Ikkanborduren.bat en wacht tot de installatie klaar is.
+4. Gebruik daarna de snelkoppeling Ikkanborduren of Start_Ikkanborduren.bat.
+
+Wat zit erin
+- Eigen ontwerpeditor met tekenen van vlakken en lijnen, contourpunten en uitsparingen.
+- Import van afbeeldingen en SVG; kleurgetrouw importeren en klembord/Print Screen.
+- Instellingen voor ring, maat, vulrichting, onderlaag, stik- en satijnvulling.
+- Selecteren, verplaatsen, bewerken, kleuren wijzigen, overlap en steken controleren.
+- Export naar alleen de gevraagde machinale borduurformaten EXP en PES.
+- Lokale Bibliotheek via menu Bibliotheek: PES/EXP/BST toevoegen, verwijderen en map openen.
+- EXP export kan aanvullende INF/BMP-bestanden maken voor kleur/voorbeeldinformatie.
+
+Bibliotheek
+De lokale bibliotheek staat standaard in Documenten\Ikkanborduren\Bibliotheek.
+De bibliotheek is voor het beheren van bestanden; importeren in de bibliotheek verandert
+het oorspronkelijke bestand niet.
+
+Belangrijk voor Bernina 540
+Dit is een onafhankelijke, eigen applicatie die functies voor borduurontwerp aanbiedt.
+De volledige commerciële Hatch/Bernina DesignerPlus-software en hun exacte interface zijn
+niet gekopieerd. Dit pakket is hier niet op een fysieke Bernina 540 getest: controleer
+ieder ontwerp op de machine en maak altijd eerst een proefborduursel op reststof.
+Controleer ring, ontwerpafmetingen, kleuren en eventuele hulpbestanden voordat u begint.
+Gebruik alleen een USB-stick die de machine herkent en verwijder deze veilig uit Windows.
+
+Problemen oplossen
+- Als de installatie niet start: installeer Python 3.13 64-bit en voer de installatie opnieuw uit.
+- De installatie downloadt de benodigde Python-pakketten. Internet is nodig tijdens de eerste installatie.
+- Bij startfouten staat foutmelding.txt in de programmamap.

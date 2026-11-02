@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 120" width="300" height="120">
+<title>Strakke lijnen — eigen testontwerp</title>
+<rect x="10" y="30" width="120" height="60" rx="12" fill="#008743"/>
+<circle cx="200" cy="60" r="40" fill="#ffe600" stroke="#b22121" stroke-width="8"/>
+<path d="M150 100 L290 100" stroke="#008743" stroke-width="6"/>
+</svg>

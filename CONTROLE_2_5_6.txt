@@ -1,0 +1,23 @@
+CONTROLE IK KAN BORDUREN 2.5.6 — 1 november 2026
+
+Bron: laatst teruggevonden Ikkanborduren_Windows_gecontroleerd.zip.
+
+Wijzigingen:
+- Verspringende tatami-naaldpenetraties in opeenvolgende vulrijen.
+- 0,2 mm vulcompensatie onder de contour.
+- Minder onderlaag bij kleine en smalle onderdelen.
+- Smalle vulrijfragmenten kleiner dan 1,2 mm worden overgeslagen.
+
+Technische controles:
+- Alle Python-bestanden compileren zonder syntaxfouten.
+- Gerichte test van de nieuwe vulrijgenerator uitgevoerd met een minimale module-stub: verspringende rijposities en minimale/maximale segmentlengtes gecontroleerd.
+- ZIP-integriteit van de uiteindelijke build wordt gecontroleerd na het inpakken.
+
+Beperkingen:
+- De volledige pytest-suite kon niet draaien: pyembroidery ontbreekt in deze uitvoeromgeving.
+- PySide6 ontbreekt; Windows-GUI en installatie zijn hier niet gestart.
+- PES/EXP-export en heropenen konden daarom niet worden getest.
+- Geen fysieke borduurproef op de BERNINA 540 uitgevoerd.
+
+Belangrijk:
+Dit is een gerichte correctie van de steekgenerator. Zet de contour in de objectvolgorde na de vulling zodat deze als laatste wordt geborduurd. Test eerst op een proeflapje met geschikte versteviging; controleer de eerste proef op de onderzijde voordat je een handdoek of kledingstuk borduurt.

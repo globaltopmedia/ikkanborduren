@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="nl">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ikkanborduren 2.7 — handleiding</title>
+<style>
+body{font:17px/1.6 system-ui,Segoe UI,Arial,sans-serif;max-width:960px;margin:32px auto;padding:0 24px;color:#23354a}
+h1,h2,h3{color:#087862;line-height:1.25}
+h2{margin-top:44px;padding-top:12px;border-top:2px solid #d7e6e1}
+h3{margin-top:26px}
+code,kbd{background:#eef3f4;padding:2px 6px;border-radius:4px;font-size:.92em}
+kbd{border:1px solid #c7d3d9}
+table{border-collapse:collapse;width:100%;margin:12px 0}
+td,th{border:1px solid #ccd7df;padding:9px;text-align:left;vertical-align:top}
+th{background:#e6f2ee}
+img{max-width:100%;border:1px solid #ccd7df;border-radius:6px}
+.note{background:#fff1d8;padding:12px 16px;border-radius:6px}
+.tip{background:#e6f4ee;padding:12px 16px;border-radius:6px}
+.nieuw{display:inline-block;background:#087862;color:#fff;font-size:.72em;font-weight:600;padding:2px 8px;border-radius:10px;vertical-align:middle;margin-left:6px}
+nav{background:#f4f8f9;padding:12px 20px;border-radius:6px}
+nav ol{margin:6px 0;columns:2}
+.v26{display:inline-block;background:#dfe9e6;color:#36584f;font-size:.72em;font-weight:600;padding:2px 8px;border-radius:10px;vertical-align:middle;margin-left:6px}
+.small{font-size:.9em;color:#4b5d6e}
+</style>
+
+<h1>Ikkanborduren 2.7 — handleiding</h1>
+<p>Deze handleiding beschrijft alle functies van het programma, met bij elke functie hoe je hem gebruikt. Functies die nieuw zijn in versie 2.7 hebben het label <span class="nieuw">NIEUW</span>; functies die in versie 2.6 zijn toegevoegd hebben het label <span class="v26">2.6</span>.</p>
+<p class="note"><b>Altijd eerst proefborduren.</b> Ikkanborduren is een zelfstandig programma, geen BERNINA-product, en is nog niet op een echte Bernina 540 getest. Maak elk nieuw ontwerp eerst op een restje van dezelfde stof, met passende versteviging.</p>
+
+<nav><b>Inhoud</b>
+<ol>
+<li><a href="#snel">Snel beginnen</a></li>
+<li><a href="#scherm">Het scherm</a></li>
+<li><a href="#onderdeel">Onderdeel aanklikken en aanpassen</a> <span class="nieuw">NIEUW</span></li>
+<li><a href="#pijlen">Richtingspijlen</a> <span class="nieuw">NIEUW</span></li>
+<li><a href="#groep">Groeperen en het mes</a> <span class="nieuw">NIEUW</span></li>
+<li><a href="#toverstaf">Toverstaf</a> <span class="v26">2.6</span></li>
+<li><a href="#auto">Automatisch borduren</a> <span class="v26">2.6</span></li>
+<li><a href="#rand">Rand rondom het ontwerp</a> <span class="v26">2.6</span></li>
+<li><a href="#applicatie">Applicaties</a> <span class="v26">2.6</span></li>
+<li><a href="#raam">Borduurraam en ware grootte</a> <span class="v26">2.6</span></li>
+<li><a href="#afbeelding">Afbeelding openen en voorbereiden</a></li>
+<li><a href="#vlakken">Vlakken tekenen en instellen</a></li>
+<li><a href="#steken">Steeksoorten</a></li>
+<li><a href="#vormen">Vormen en de kolommen</a></li>
+<li><a href="#richting">Steekrichting</a></li>
+<li><a href="#contour">Contour, gaten en overlap</a></li>
+<li><a href="#letters">Letters</a></li>
+<li><a href="#volgorde">Volgorde</a></li>
+<li><a href="#bewerken">Selecteren, verplaatsen, maat en steken bewerken</a></li>
+<li><a href="#simulatie">Simulatie</a></li>
+<li><a href="#bewaren">Stof kiezen, bewaren en naar de machine</a></li>
+<li><a href="#sneltoetsen">Sneltoetsen</a></li>
+<li><a href="#problemen">Problemen oplossen</a></li>
+</ol></nav>
+
+<h2 id="snel">1. Snel beginnen</h2>
+<h3>Van tekening naar borduursel in vier stappen</h3>
+<ol>
+<li><b>Tekening openen:</b> klik <b>Afbeelding openen</b>, of kopieer een tekening in Verkenner (<kbd>Ctrl</kbd>+<kbd>C</kbd>) en plak hem in het programma (<kbd>Ctrl</kbd>+<kbd>V</kbd>).</li>
+<li><b>Raam kiezen:</b> kies bovenaan bij <b>Raam</b> de ring die je gebruikt (Medium, Large Oval of Mega).</li>
+<li><b>Borduren:</b> klik op <b>Automatisch borduren</b> om de hele tekening om te zetten. Wil je alleen een deel borduren, klik dan op <b>Toverstaf</b> en daarna op dat deel.</li>
+<li><b>Naar de machine:</b> klik <b>Opslaan op USB</b> of <b>EXP / PES exporteren</b>, kies de stof en zet de bestanden op de USB-stick.</li>
+</ol>
+<h3>Zelf tekenen</h3>
+<ol>
+<li>Klik <b>Bestand → Nieuw ontwerp</b> (<kbd>Ctrl</kbd>+<kbd>N</kbd>).</li>
+<li>Ga naar het tabblad <b>Vlakken</b> en klik <b>Begin nieuw vlak</b>, of teken een rechthoek, ovaal of cirkel (zie <a href="#vormen">Vormen</a>).</li>
+<li>Kies de steek en klik <b>Maak steken uit alle vlakken</b>.</li>
+</ol>
+<p class="tip">Bewaar je werk als <b>project (BST)</b> met <kbd>Ctrl</kbd>+<kbd>S</kbd>. Een project bewaart de tekening, de vlakken, de steken en alle instellingen, zodat je later verder kunt. Een EXP- of PES-bestand bevat alleen de steken.</p>
+
+<h2 id="scherm">2. Het scherm</h2>
+<img src="Extra_scherm.png" alt="Ikkanborduren 2.6 met het tabblad Extra, een borduurraam op ware grootte en een schildpad met satijnrand">
+<table>
+<tr><th>Onderdeel</th><th>Wat het doet</th></tr>
+<tr><td>Bovenste knoppenbalk</td><td>Selecteren, Alles selecteren, Verplaatsen, Selectie 90°, Tekening plakken, Passend in beeld, Steekrichting tonen en wijzigen.</td></tr>
+<tr><td>Tweede knoppenbalk <span class="v26">2.6</span></td><td>Toverstaf, Automatisch borduren, Rand toevoegen, Applicatie, Ware grootte, de keuze <b>Raam</b>, en nieuw in 2.7: <b>Richtingspijlen</b>, <b>Mes</b>, <b>Groeperen</b> en <b>Groep losmaken</b>.</td></tr>
+<tr><td>Grote knoppen</td><td>Afbeelding openen, Project opslaan, EXP / PES exporteren, Ongedaan, Opnieuw, Opslaan op USB.</td></tr>
+<tr><td>Tabbladen links</td><td>Afbeelding, Ring &amp; steken, Bewerken, Vlakken, Letters, Volgorde, Steekrichting, Contour, Gaten, Selectie en maat en <b>Extra</b>. Zie je een tabblad niet, klik dan op de pijltjes naast de tabbladen.</td></tr>
+<tr><td>Gereedschapskeuze boven het werkvlak</td><td>Hier staat wat de muis op dit moment doet, bijvoorbeeld <i>Vlak tekenen</i>, <i>Kleurpenseel</i> of <i>Toverstaf</i>.</td></tr>
+<tr><td>Vinkjes Vlakken / Afbeelding / Steken / Sprongen</td><td>Bepalen wat je ziet. Ze veranderen niets aan het ontwerp.</td></tr>
+<tr><td>Statusregel onderaan</td><td>Maat, aantal steken, kleurblokken en sprongen. Groen betekent dat het ontwerp in de ring past. Bij rood vallen punten buiten de ring; die worden in het werkvlak rood getekend.</td></tr>
+<tr><td>Menu Kolommen</td><td>Opent de extra kolommen <b>Borduuronderdelen</b> en <b>Steken en patronen</b>. <b>Compact scherm</b> sluit ze weer.</td></tr>
+<tr><td>Menu Bibliotheek</td><td>Je eigen borduurbibliotheek in <i>Documenten\Ikkanborduren\Bibliotheek</i>. Hier kun je PES-, EXP- en BST-bestanden toevoegen, verwijderen en de map openen.</td></tr>
+</table>
+<p><b>Zoomen en schuiven:</b> zoom met het muiswiel en schuif met de <b>middelste muisknop</b> ingedrukt. <b>Passend in beeld</b> toont het hele ontwerp.</p>
+<p><b>Ongedaan maken</b> (<kbd>Ctrl</kbd>+<kbd>Z</kbd>) en <b>Opnieuw</b> (<kbd>Ctrl</kbd>+<kbd>Y</kbd>) werken voor alle bewerkingen.</p>
+
+<h2 id="onderdeel">3. Onderdeel aanklikken en aanpassen <span class="nieuw">NIEUW</span></h2>
+<p>Wil je tijdens het maken van een borduursel een deel veranderen, klik er dan gewoon op.</p>
+<ol>
+<li>Kies boven het werkvlak <b>Selecteren met slepen</b> (dat is de standaard).</li>
+<li>Klik op een deel van het borduursel, ook als het een dunne lijn is.</li>
+<li>Het onderdeel <b>licht op</b>: de steken worden roze met een gele gloed en de rand krijgt een roze stippellijn. In de kolom <b>Borduuronderdelen</b> wordt het onderdeel blauw gemarkeerd. In de lijst <b>Garenkleuren van het borduurpatroon</b> (tabblad Bewerken) krijgt de kleur van dit onderdeel een ▶ en wordt die regel gemarkeerd.</li>
+</ol>
+<img src="Onderdeel_scherm.png" alt="De groene golf is aangeklikt: hij licht roze op en rechts staat het vak Geselecteerd onderdeel aanpassen">
+<p>Met <kbd>Ctrl</kbd>+klik voeg je meer onderdelen toe aan de selectie, of haal je er een weg. Andersom werkt het ook: klik je in de garenkleurenlijst op een kleur, dan lichten alle onderdelen in die kleur op. In de garenkleurenlijst staat nu ook bij elke kleur welke onderdelen erin zitten.</p>
+<h3>Direct aanpassen</h3>
+<p>Rechts, onder de lijst met onderdelen, staat het vak <b>Geselecteerd onderdeel aanpassen</b>. Alles wat je hier verandert, geldt voor de geselecteerde onderdelen. De steken worden <b>meteen opnieuw gemaakt</b>; je hoeft niet meer op een aparte knop te drukken.</p>
+<table>
+<tr><th>Knop of keuze</th><th>Wat het doet</th></tr>
+<tr><td>Kleur wijzigen</td><td>Kies een nieuwe garenkleur voor <b>alleen dit onderdeel</b>. Andere onderdelen met dezelfde kleur blijven zoals ze zijn.</td></tr>
+<tr><td>Steeksoort</td><td>Bijvoorbeeld van <i>Tatami</i> naar <i>Satijnsteek</i> of <i>Satijnvulling</i>. Zie <a href="#steken">Steeksoorten</a>.</td></tr>
+<tr><td>Steekrichting + Toepassen</td><td>Typ een hoek en druk <kbd>Enter</kbd> of klik <b>Toepassen</b>. Wil je op verschillende plekken een andere richting, gebruik dan <a href="#pijlen">Richtingspijlen</a>.</td></tr>
+<tr><td>Gat maken / Gat sluiten</td><td>Markeer met klikken een gebied en druk <kbd>Enter</kbd> (zie <a href="#contour">Gaten</a>).</td></tr>
+<tr><td>Alle gaten in dit onderdeel dichtmaken</td><td>Vult in één keer alle gaten van het onderdeel.</td></tr>
+<tr><td>Groeperen / Groep losmaken / Mes</td><td>Zie <a href="#groep">Groeperen en het mes</a>.</td></tr>
+<tr><td>Steken direct opnieuw maken na een wijziging</td><td>Zet dit vinkje uit als je eerst veel wilt veranderen en daarna pas één keer steken wilt maken.</td></tr>
+</table>
+<p>De knop <b>Garenkleur wijzigen</b> onder de garenkleurenlijst verandert de kleur van <b>alle onderdelen in die kleur</b>. De nieuwe kleur blijft ook bewaard als je later opnieuw steken maakt.</p>
+<p class="note">Steken die je met de hand hebt verschoven of verwijderd, worden bij het opnieuw maken vervangen. Doe handwerk aan losse steekpunten daarom als laatste.</p>
+
+<h2 id="pijlen">4. Richtingspijlen: de steekrichting op meerdere plekken <span class="nieuw">NIEUW</span></h2>
+<p>Met richtingspijlen geef je op verschillende plekken van een vlak of lijn een andere steekrichting. Je zet eerst alle pijlen en past ze daarna in één keer toe met <kbd>Enter</kbd>.</p>
+<ol>
+<li>Klik op het onderdeel en klik op <b>Richtingspijlen zetten</b> (of <b>Richtingspijlen</b> in de tweede knoppenbalk).</li>
+<li>Klik in het vlak, houd de muisknop ingedrukt en <b>sleep in de richting die de steken moeten krijgen</b>. Laat los: er staat een oranje pijl met een nummer.</li>
+<li>Zet op dezelfde manier pijlen op andere plekken. Je mag ook pijlen in andere onderdelen zetten.</li>
+<li>Druk op <kbd>Enter</kbd>. De steken worden opnieuw gemaakt.</li>
+</ol>
+<img src="Pijlen_scherm.png" alt="Twee oranje richtingspijlen in de golf, nog niet toegepast">
+<ul>
+<li>Een <b>rechtsklik</b> op een pijl haalt die pijl weg. <kbd>Backspace</kbd> haalt de laatste pijl weg. <kbd>Esc</kbd> stopt zonder iets te veranderen.</li>
+<li>Klik je zonder te slepen, dan krijgt de pijl de hoek die in het vak <b>Steekrichting</b> staat.</li>
+<li>Een <b>vlak (tatami of satijnvulling)</b> wordt verdeeld: elk stuk krijgt de richting van de dichtstbijzijnde pijl. De stukken overlappen een heel klein beetje, zodat er geen spleet ontstaat.</li>
+<li>Bij een <b>lijn (satijnsteek)</b> blijft de satijn de lijn volgen. De pijlen bepalen hoe schuin de steken over de lijn liggen, en dat kan per stuk van de lijn anders.</li>
+<li>Toegepaste pijlen zie je in het paars als je het onderdeel aanklikt. Klik opnieuw op <b>Richtingspijlen zetten</b> om ze te verschuiven: de bestaande pijlen staan dan klaar om aan te passen. <b>Pijlen wissen</b> zet het onderdeel terug naar één richting.</li>
+<li>Stiklijnen, applicaties en patroonvullingen hebben geen steekrichting. Pijlen daarin worden overgeslagen.</li>
+</ul>
+
+<h2 id="groep">5. Groeperen en het mes <span class="nieuw">NIEUW</span></h2>
+<h3>Groeperen</h3>
+<ol>
+<li>Klik op het eerste onderdeel en <kbd>Ctrl</kbd>+klik op de andere onderdelen.</li>
+<li>Klik <b>Groeperen</b> (<kbd>Ctrl</kbd>+<kbd>G</kbd>).</li>
+</ol>
+<p>Klik je daarna op één onderdeel van de groep, dan wordt de hele groep gekozen. Zo verplaats, draai, vergroot of verkleur je alles samen. In de onderdelenlijst staat <i>[Groep 1]</i> achter de naam. Wil je toch één onderdeel uit de groep aanpassen, gebruik dan <kbd>Alt</kbd>+klik, of kies het in de onderdelenlijst.</p>
+<p><b>Groep losmaken</b> (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd>) maakt van de groep weer losse onderdelen.</p>
+<h3>Mes: een deel losmaken</h3>
+<p>Met het mes snijd je een vlak langs een lijn in stukken. Elk stuk wordt een zelfstandig onderdeel met eigen kleur, steek en richting.</p>
+<ol>
+<li>Klik op het onderdeel dat je wilt snijden (zonder selectie snijdt het mes elk vlak waar de lijn helemaal overheen gaat).</li>
+<li>Klik <b>Mes</b> (<kbd>K</kbd>).</li>
+<li>Houd de linkermuisknop ingedrukt en <b>trek een lijn helemaal over het vlak</b>. De lijn mag krom zijn. Stopt de lijn net voor de rand, dan snijdt het mes toch door.</li>
+<li>Laat los. Het vlak is nu in delen gesplitst; het nieuwe deel heet bijvoorbeeld <i>Tatami 12 deel 2</i>.</li>
+</ol>
+<img src="Mes_scherm.png" alt="Een rode stippellijn van het mes over de golf">
+<p>Langs de snijlijn overlappen de delen een heel klein beetje, zodat er in het borduursel geen spleet ontstaat. Met <b>Ongedaan</b> (<kbd>Ctrl</kbd>+<kbd>Z</kbd>) zet je het vlak weer in één stuk.</p>
+
+<h2 id="toverstaf">6. Toverstaf <span class="v26">2.6</span></h2>
+<p>Met de toverstaf maak je met één klik een borduurvlak van een deel van de tekening. Klik je bijvoorbeeld op een blauw vlak, dan wordt dat blauwe deel in één keer omgezet en meteen in steken getoond.</p>
+<ol>
+<li>Open of plak een tekening.</li>
+<li>Klik op <b>Toverstaf</b> in de tweede knoppenbalk, of druk op <kbd>W</kbd>.</li>
+<li>Klik in de tekening op het kleurvlak dat je wilt borduren.</li>
+<li>Herhaal dit voor elk ander deel. Elk deel wordt een apart vlak in de lijst.</li>
+</ol>
+<p>Instellingen op het tabblad <b>Extra</b>, groep <i>Toverstaf</i>:</p>
+<table>
+<tr><th>Instelling</th><th>Betekenis</th></tr>
+<tr><td>Kleurtolerantie</td><td>Hoe sterk een kleur mag afwijken van de kleur waarop je klikt. Bij een lage waarde (10–20) neemt de toverstaf alleen precies die kleur mee. Bij een hogere waarde (40–80) neemt hij ook lichtere en donkere tinten mee, wat handig is bij gescande tekeningen. Standaard is 32.</td></tr>
+<tr><td>Steek voor dit deel</td><td><b>Automatisch</b> kiest zelf: een hele dunne lijn wordt een stiklijn, een lijn wordt een satijnsteek die de lijn volgt, een smal vlak satijnvulling en een breed vlak tatami. Lijnenwerk met dikkere stukken krijgt satijn op de lijnen en tatami op de dikke stukken. Je kunt ook vast kiezen voor tatami, satijn, tatami + satijnrand, applicatie of alleen de contourlijn.</td></tr>
+<tr><td>Gaatjes kleiner dan … dichtzetten</td><td>Kleine vlekjes of glimlichtjes binnen het vlak worden meegevuld, zodat je één net vlak krijgt. Zet dit op 0 als ook kleine openingen open moeten blijven.</td></tr>
+<tr><td>Direct steken maken na de klik</td><td>Staat dit vinkje aan, dan worden de steken meteen berekend. Zet het uit als je eerst veel delen wilt aanklikken en daarna in één keer steken wilt maken.</td></tr>
+</table>
+<p class="tip">Ligt de klik op de witte achtergrond, dan meldt het programma dat. Moet wit wél geborduurd worden, zet dan op het tabblad <b>Afbeelding</b> het vinkje <i>Witte achtergrond langs de rand weghalen</i> uit.</p>
+<p>Een vlak van de toverstaf is een gewoon vlak. Je kunt daarna de contourpunten aanpassen, de steek of kleur veranderen, het vlak verplaatsen of verwijderen.</p>
+
+<h2 id="auto">7. Automatisch borduren met één knop <span class="v26">2.6</span></h2>
+<p>Zet een hele tekening of een heel logo in één keer om in een borduurontwerp. Het programma:</p>
+<ul>
+<li>brengt de kleuren terug tot het aantal dat je instelt;</li>
+<li>laat kleine details weg die niet goed te borduren zijn;</li>
+<li>laat te korte steken weg, die vaak draadbreuk of knoopjes geven;</li>
+<li>kiest per vlak de steek: een hele dunne lijn wordt een stiklijn, een lijn wordt een satijnsteek die de lijn volgt, een smal vlak satijnvulling en een breed vlak tatami.</li>
+</ul>
+<ol>
+<li>Open of plak de tekening en stel op <b>Ring &amp; steken</b> de <b>Ontwerpbreedte</b> in.</li>
+<li>Kies op <b>Extra</b> het maximaal aantal kleuren (standaard 6).</li>
+<li>Klik <b>Automatisch borduren</b>. Bestaande vlakken worden pas vervangen nadat je dat bevestigt.</li>
+<li>Onderaan zie je hoeveel vlakken er zijn gemaakt, met welke steken, en hoeveel korte steken zijn weggelaten.</li>
+</ol>
+<table>
+<tr><th>Instelling</th><th>Betekenis</th></tr>
+<tr><td>Maximaal aantal kleuren</td><td>Minder kleuren geeft minder garenwissels en een rustiger ontwerp.</td></tr>
+<tr><td>Kleine details weglaten</td><td>Vlakjes kleiner dan dit oppervlak (in mm²) worden weggelaten. Verhoog de waarde als er te veel kleine snippers ontstaan.</td></tr>
+<tr><td>Kleine steken weglaten onder</td><td>Steken korter dan deze lengte worden samengevoegd met de steek ernaast. Automatisch borduren zet deze waarde op 0,4 mm als hij op <i>uit</i> stond. De instelling geldt daarna ook voor <i>Maak steken uit alle vlakken</i>. Zet hem terug op <i>uit</i> als je alle steken wilt houden.</td></tr>
+<tr><td>Grote vlakken als applicatie vanaf</td><td>Vlakken die groter zijn dan dit oppervlak worden een <a href="#applicatie">applicatie</a> in plaats van een dichte vulling. Dat bespaart veel steken bij grote vlakken. Standaard staat dit <i>uit</i>.</td></tr>
+</table>
+<p>Na het automatisch borduren kun je elk vlak nog apart aanpassen op het tabblad <b>Vlakken</b>. Een foto omzetten naar een foto-borduursel kan dit programma niet. Gebruik tekeningen, logo's en illustraties met duidelijke kleurvlakken.</p>
+
+<h2 id="rand">8. Afwerking: rand rondom het ontwerp <span class="v26">2.6</span></h2>
+<p>Hiermee zet je een rand om het hele ontwerp, bijvoorbeeld voor een embleem of patch.</p>
+<ol>
+<li>Ga naar <b>Extra</b>, groep <i>Afwerking — rand rondom het ontwerp</i>.</li>
+<li>Kies de steek, breedte, afstand en vorm (zie de tabel).</li>
+<li>Klik <b>Rand toevoegen of vervangen</b>, of de knop <b>Rand toevoegen</b> bovenaan.</li>
+</ol>
+<table>
+<tr><th>Instelling</th><th>Keuzes</th></tr>
+<tr><td>Steek</td><td><b>Satijnsteek</b>, <b>enkele</b>, <b>dubbele</b> of <b>drievoudige stiklijn</b>. Bij een dubbele stiklijn gaat de naald heen en terug; bij een drievoudige stiklijn wordt elke steek drie keer genaaid, zodat de lijn dik en duidelijk wordt.</td></tr>
+<tr><td>Satijnbreedte</td><td>1 tot 5 mm. Deze instelling geldt alleen bij satijnsteek.</td></tr>
+<tr><td>Afstand vanaf buitenrand werk</td><td>De ruimte tussen de buitenkant van je ontwerp en de binnenkant van de rand, van 0 tot 50 mm. Bij 0 ligt de rand direct tegen het ontwerp.</td></tr>
+<tr><td>Vorm</td><td><b>Volgt de vorm van het ontwerp</b> (de rand loopt mee met de buitenlijn), <b>Rechthoek</b>, <b>Ovaal</b> of <b>Cirkel</b>.</td></tr>
+<tr><td>Rand om</td><td><b>Hele ontwerp</b>, of <b>Alleen geselecteerde vlakken</b>.</td></tr>
+<tr><td>Randkleur kiezen</td><td>De garenkleur van de rand.</td></tr>
+</table>
+<ul>
+<li>De rand wordt altijd als laatste geborduurd.</li>
+<li>Klik je opnieuw op <b>Rand toevoegen</b>, dan wordt de oude rand vervangen. Je krijgt dus niet twee randen over elkaar.</li>
+<li><b>Rand verwijderen</b> haalt de rand weg.</li>
+<li>Bij <i>Volgt de vorm</i> krijgen delen die ver uit elkaar liggen elk een eigen rand. Wil je één rand om alles heen, kies dan een grotere afstand of een rechthoek, ovaal of cirkel.</li>
+</ul>
+
+<h2 id="applicatie">9. Applicaties <span class="v26">2.6</span></h2>
+<p>Bij een applicatie naai je een stukje stof op het werk in plaats van een vlak dicht te borduren. Elk applicatiedeel borduurt het programma in drie stappen. Tussen de stappen stopt de machine.</p>
+<table>
+<tr><th>Stap</th><th>De machine borduurt</th><th>Daarna doe jij</th></tr>
+<tr><td>1</td><td><b>Plaatsingslijn:</b> een stiklijn die laat zien waar de stof moet komen.</td><td>De machine stopt. Leg het stukje applicatiestof over de lijn; het mag ruim over de lijn vallen.</td></tr>
+<tr><td>2</td><td><b>Vastzetsteek:</b> een open zigzag, dubbele of enkele stiklijn die de stof vastzet.</td><td>De machine stopt. Haal de ring uit de machine zonder de stof uit de ring te halen, en knip de stof vlak langs de vastzetsteek af. Zet de ring terug.</td></tr>
+<tr><td>3</td><td><b>Satijnrand:</b> dekt de geknipte rand netjes af.</td><td>Klaar.</td></tr>
+</table>
+<p>De stops staan in het borduurbestand als kleurwissels met dezelfde garenkleur. Je hoeft dus geen ander garen te pakken; ga gewoon verder. In de kleurenlijst staat bij elke stop wat je moet doen, bijvoorbeeld <i>Applicatie 2/3: stof neerleggen en vastzetten</i>.</p>
+
+<h3>Applicatie maken van bestaande vlakken</h3>
+<ol>
+<li>Selecteer één of meer gesloten vlakken: klik erop, sleep een selectievak of gebruik <kbd>Ctrl</kbd>+<kbd>A</kbd>.</li>
+<li>Klik <b>Applicatie</b> in de knoppenbalk, of op <b>Extra</b> de knop <b>Geselecteerde vlakken worden applicatie</b>.</li>
+<li>Maak de steken, bijvoorbeeld met <b>Maak steken uit alle vlakken</b>.</li>
+</ol>
+<h3>Applicatie in delen met de hand tekenen</h3>
+<ol>
+<li>Klik op <b>Extra</b> de knop <b>Applicatiedeel met de hand tekenen</b>.</li>
+<li>Zet punten langs de vorm: met links een hoek, met rechts een ronde curve. Druk <kbd>Enter</kbd> om het deel te sluiten.</li>
+<li>Herhaal dit voor elk volgend deel. Elk deel krijgt zijn eigen drie stappen.</li>
+<li>De volgorde van de delen pas je aan op het tabblad <b>Volgorde</b>. Zet de delen die onderop liggen het eerst.</li>
+</ol>
+<h3>Automatisch</h3>
+<ul>
+<li>Stel bij <i>Automatisch borduren</i> de waarde <b>Grote vlakken als applicatie vanaf</b> in. Grote vlakken worden dan vanzelf applicatie.</li>
+<li>Of kies bij de toverstaf als steek <b>Applicatie</b>: het aangeklikte deel wordt dan meteen een applicatiedeel.</li>
+</ul>
+<h3>Instellingen</h3>
+<table>
+<tr><th>Instelling</th><th>Betekenis</th></tr>
+<tr><td>Breedte satijnrand</td><td>1 tot 5 mm. Standaard is 3 mm. Gebruik een bredere rand voor stof die makkelijk rafelt, zoals linnen.</td></tr>
+<tr><td>Vastzetsteek</td><td><b>Open zigzag</b> houdt de stof het stevigst vast. Een <b>dubbele</b> of <b>enkele stiklijn</b> is fijner, bijvoorbeeld voor vilt.</td></tr>
+</table>
+<p>Heeft een applicatiedeel een uitsparing, bijvoorbeeld een raampje, dan blijft die opening open. Rond de uitsparing komt de satijnrand op de stof te liggen, en niet in de opening.</p>
+<h3>Snijpatroon</h3>
+<p>Klik <b>Snijpatroon applicatiedelen bewaren (SVG)</b>. Je krijgt een bestand met alle applicatiedelen op ware grootte. Print het op 100% (niet op 'passend maken'), knip de vormen uit en gebruik ze als mal voor de stof. Knip de stof iets ruimer dan de mal.</p>
+
+<h2 id="raam">10. Borduurraam en ware grootte <span class="v26">2.6</span></h2>
+<p>Kies je ring bovenaan bij <b>Raam</b>, op <b>Extra</b> of op <b>Ring &amp; steken</b>. De drie keuzes zijn steeds gelijk aan elkaar.</p>
+<table>
+<tr><th>Raam</th><th>Borduurbereik</th></tr>
+<tr><td>Medium</td><td>100 × 130 mm, ovaal</td></tr>
+<tr><td>Large Oval</td><td>145 × 255 mm, ovaal</td></tr>
+<tr><td>Mega Hoop</td><td>150 × 400 mm</td></tr>
+<tr><td>Eigen maat</td><td>Vul zelf breedte en hoogte in op <b>Ring &amp; steken</b>.</td></tr>
+</table>
+<ul>
+<li><b>Borduurraam realistisch tonen:</b> de ring wordt getekend zoals hij eruitziet, met spanschroef, bevestiging en middenstreepjes. Het borduurbereik binnen de ring heeft precies de echte maat. De buitenkant van de ring is een illustratie.</li>
+<li><b>Raamsjabloon: raster van 1 cm:</b> een raster met hokjes van 1 × 1 cm en de middellijnen, net als het plastic sjabloon bij je ring. Zo kun je het ontwerp goed plaatsen.</li>
+<li><b>Ware grootte (100%):</b> toont het ontwerp op het scherm even groot als het geborduurd wordt. Leg er gerust een liniaal tegen. Klopt het niet precies, dan staat de schermvergroting van Windows (Instellingen → Beeldscherm → Schaal) waarschijnlijk niet op de standaardwaarde.</li>
+</ul>
+<p class="note"><b>Mega Hoop:</b> 150 × 400 mm is het totale bereik. De machine borduurt dat in meerdere raamposities. Dit programma verdeelt een ontwerp niet automatisch over de posities. Ontwerpen die hoger zijn dan 251 mm worden daarom niet geëxporteerd; verdeel zo'n ontwerp zelf over aparte projecten.</p>
+
+<h2 id="afbeelding">11. Afbeelding openen en voorbereiden</h2>
+<h3>Openen of plakken</h3>
+<ul>
+<li><b>Afbeelding openen</b> (<kbd>Ctrl</kbd>+<kbd>O</kbd>): opent PNG, JPG, BMP, WEBP, SVG, EXP/PES en BST-projecten. De bestandskiezer start in de map Downloads.</li>
+<li><b>Plakken</b> (<kbd>Ctrl</kbd>+<kbd>V</kbd> of <kbd>Shift</kbd>+<kbd>V</kbd>): kopieer een bestand in Verkenner of een afbeelding in een ander programma, en plak het hier. Ook een schermafdruk (Print Screen) kun je plakken.</li>
+<li><b>Afbeelding kopiëren</b> (<kbd>Shift</kbd>+<kbd>C</kbd>): zet de huidige afbeelding op het klembord.</li>
+</ul>
+<h3>Tabblad Afbeelding</h3>
+<table>
+<tr><th>Knop of instelling</th><th>Gebruik</th></tr>
+<tr><td>Aantal kleuren + Kleuren vereenvoudigen</td><td>Brengt de afbeelding terug tot dit aantal effen kleuren.</td></tr>
+<tr><td>Witte achtergrond langs de rand weghalen</td><td>Wit aan de buitenkant wordt niet geborduurd.</td></tr>
+<tr><td>Kleurenlijst</td><td>Dubbelklik op een kleur of klik <b>Geselecteerde kleur wijzigen</b> om die kleur te vervangen. <b>Geselecteerde kleur weglaten</b> haalt een kleur helemaal weg.</td></tr>
+<tr><td>Kleurpenseel / Gum</td><td>Kies deze in de gereedschapskeuze om met de muis in de afbeelding te schilderen of te gummen. De dikte stel je in bij <b>Penseeldikte</b>.</td></tr>
+<tr><td>Kleine details weglaten, Contour gladmaken, Vergelijkbare kleuren samen</td><td>Instellingen voor <b>Afbeelding opschonen</b>. Hiermee verwijder je snippers, maak je randen glad en voeg je bijna gelijke tinten samen.</td></tr>
+<tr><td>Afbeelding naar bewerkbare vlakken</td><td>Zet de hele afbeelding om in vlakken die je daarna kunt aanpassen, zonder dat er steken worden gemaakt.</td></tr>
+<tr><td>Afbeelding alleen als overtrekvoorbeeld</td><td>De afbeelding wordt licht getoond, zodat je er vlakken overheen kunt tekenen.</td></tr>
+<tr><td>Logo bewaren als vector (SVG)</td><td>Bewaart de vereenvoudigde afbeelding als SVG-bestand.</td></tr>
+</table>
+
+<h2 id="vlakken">12. Vlakken tekenen en instellen</h2>
+<p>Een <b>vlak</b> is een vorm met een buitenlijn die het programma met steken vult. Een <b>open stiklijn</b> is een lijn zonder vulling.</p>
+<h3>Tekenen</h3>
+<ol>
+<li>Klik <b>Begin nieuw vlak</b>, of <b>Begin open stiklijn</b> voor een lijn.</li>
+<li>Klik met <b>links</b> voor een hoekpunt en met <b>rechts</b> voor een ronde curve. Houd <kbd>Ctrl</kbd> ingedrukt om in stappen van 15° te tekenen.</li>
+<li><kbd>Backspace</kbd> haalt het laatste punt weg en <kbd>Esc</kbd> annuleert.</li>
+<li>Druk <kbd>Enter</kbd> of klik <b>Vlak sluiten</b>.</li>
+</ol>
+<h3>Aanpassen</h3>
+<ul>
+<li><b>Contourpunten aanpassen</b> (gereedschapskeuze): sleep punten. Met rechts wissel je een punt tussen hoek en curve.</li>
+<li><b>Contourpunt toevoegen:</b> klik op de lijn waar een extra punt moet komen. <b>Geselecteerd contourpunt verwijderen</b> haalt een punt weg.</li>
+<li><b>Uitsparing in geselecteerd vlak tekenen:</b> teken een opening binnen een vlak, bijvoorbeeld het gat in de letter O.</li>
+</ul>
+<h3>Instellingen per vlak</h3>
+<table>
+<tr><th>Instelling</th><th>Betekenis</th></tr>
+<tr><td>Naam en kleur</td><td>De naam staat in de lijsten; de kleur is ook de garenkleur.</td></tr>
+<tr><td>Steekvulling</td><td>Zie <a href="#steken">Steeksoorten</a>.</td></tr>
+<tr><td>Borduurfase</td><td><i>Punt / accent eerst</i>, <i>Normale laagvolgorde</i> of <i>Rechte satijnlijn als laatste</i>.</td></tr>
+<tr><td>Rijafstand / patroonmaat</td><td>De afstand tussen de vulrijen. Kleiner betekent dichter. Standaard is 0,35 mm. Bij patronen zoals sterretjes is dit de grootte van het motief.</td></tr>
+<tr><td>Max. steeklengte</td><td>De langste steek binnen een vulling of lijn.</td></tr>
+<tr><td>Satijnbreedte</td><td>De breedte van een satijnband, maximaal 5 mm.</td></tr>
+<tr><td>Vulrichting</td><td>De hoek van de vulrijen. Druk <kbd>Enter</kbd> om de hoek meteen toe te passen.</td></tr>
+<tr><td>Trekcompensatie</td><td>Maakt het vlak iets groter, zodat het na het borduren niet te klein uitvalt.</td></tr>
+<tr><td>Onderlaag vóór de vulling</td><td>Eerst een lichte steunlaag, daarna de bovenlaag.</td></tr>
+</table>
+<p>Klik <b>Instellingen toepassen op geselecteerd vlak</b> en daarna <b>Maak steken uit alle vlakken</b>.</p>
+
+<h2 id="steken">13. Steeksoorten</h2>
+<table>
+<tr><th>Steek</th><th>Gebruik</th></tr>
+<tr><td>Tatami — dicht vlak</td><td>Dichte vulling voor grote vlakken. Dunne lijnen en smalle stukken in het vlak krijgen vanzelf een satijnsteek die de lijn volgt, zodat ook die helemaal gevuld worden. <span class="nieuw">NIEUW</span></td></tr>
+<tr><td>Satijnsteek — volgt de vorm <span class="nieuw">NIEUW</span></td><td>Voor lijnen en smalle delen. De satijn loopt mee met de lijn, ook door bochten en kruisingen. Een lijn wordt in één doorgaande beweging geborduurd: eerst een stiklijn door het midden (onderlaag), daarna de satijn erover.</td></tr>
+<tr><td>Satijnvulling — van rand tot rand <span class="nieuw">NIEUW</span></td><td>Glanzende satijn die het hele vlak vult, in de gekozen steekrichting. Voor smalle vlakken; steken langer dan 4,8 mm worden gesplitst.</td></tr>
+<tr><td>Satijnrand langs de contour</td><td>Glanzende band langs de rand. Op een open lijn is het een satijnkoord.</td></tr>
+<tr><td>Tatami + satijnrand</td><td>Een vulling met een satijnrand eromheen.</td></tr>
+<tr><td>Enkele stiklijn</td><td>Een dunne lijn.</td></tr>
+<tr><td>Dubbele stiklijn <span class="v26">2.6</span></td><td>De naald gaat heen en weer terug, zodat de lijn steviger is en eindigt waar hij begon.</td></tr>
+<tr><td>Drievoudige stiklijn</td><td>Elke steek wordt drie keer genaaid. Dat geeft een dikke, duidelijke lijn.</td></tr>
+<tr><td>Onderbroken stiklijn</td><td>Een streepjeslijn met open stukjes.</td></tr>
+<tr><td>Zigzaglijn</td><td>Een open zigzag langs een lijn.</td></tr>
+<tr><td>Kruissteekvulling</td><td>Kruisjes in het vlak. Gebruik een patroonmaat van ongeveer 2 mm.</td></tr>
+<tr><td>Sterretjes, ruitjes, cirkeltjes, chevron, bloemetjes</td><td>Decoratieve motieven. De patroonmaat bepaalt de grootte.</td></tr>
+<tr><td>Applicatie <span class="v26">2.6</span></td><td>Plaatsingslijn, stop, vastzetten, stop en satijnrand. Zie <a href="#applicatie">Applicaties</a>.</td></tr>
+</table>
+
+<h2 id="vormen">14. Vormen en de kolommen</h2>
+<p>Open via <b>Kolommen</b> de kolom <b>Steken en patronen</b>:</p>
+<ul>
+<li>Kies een steek in de lijst en klik <b>Steek toepassen op geselecteerd onderdeel</b>.</li>
+<li><b>Rechthoek, Ovaal of Cirkel met muis tekenen:</b> sleep de vorm in het werkvlak.</li>
+<li><b>… met opgegeven maat maken:</b> vul eerst Vormbreedte en Vormhoogte in.</li>
+<li>Met <b>Nieuwe vormen direct in steken omzetten</b> krijgt een nieuwe vorm meteen steken.</li>
+</ul>
+<p>De kolom <b>Borduuronderdelen</b> toont alle vlakken:</p>
+<ul>
+<li>Selecteer er één of meerdere met <kbd>Ctrl</kbd> of <kbd>Shift</kbd>.</li>
+<li><b>Borduur alleen geselecteerde onderdelen</b> maakt alleen voor die vlakken steken. <b>Borduur alle onderdelen</b> doet het hele ontwerp.</li>
+<li><b>Klik op tekening om onderdeel te borduren:</b> klik op een vlak of op een kleurvlak in de tekening.</li>
+<li><b>Start / eind omdraaien per vlak</b> laat het vlak aan de andere kant beginnen. Een groen plusje is het begin en een oranje driehoekje het einde.</li>
+<li><b>Selectielijn tekenen:</b> trek een vrije lijn rond vlakken of steekpunten om ze te selecteren, en sluit af met <kbd>Enter</kbd>.</li>
+</ul>
+
+<h2 id="richting">15. Steekrichting</h2>
+<ol>
+<li>Klik <b>Steekrichting wijzigen</b> of open het tabblad <b>Steekrichting</b>.</li>
+<li>Kies bij <b>Toepassen op</b> de optie <i>Geselecteerde vlakken</i> of <i>Alle vlakken</i>.</li>
+<li>Typ de hoek en druk <kbd>Enter</kbd>. De steken worden meteen opnieuw berekend.</li>
+</ol>
+<p class="tip">Een andere richting op verschillende plekken van één vlak of lijn? Gebruik <a href="#pijlen">Richtingspijlen</a>. <span class="nieuw">NIEUW</span></p>
+<p>Snelknoppen: <b>45°</b>, <b>90°</b> (<kbd>Ctrl</kbd>+<kbd>9</kbd>) en <b>180°</b> (<kbd>Ctrl</kbd>+<kbd>1</kbd>). Je kunt ook de richtingslijn met de muis slepen en daarna <kbd>Enter</kbd> drukken. Een nieuw ontwerp begint op 45°.</p>
+
+<h2 id="contour">16. Contour, gaten en overlap</h2>
+<ul>
+<li><b>Contour:</b> zet een satijn- of stiklijncontour om een vlak of om het hele ontwerp. Afstand is de ruimte tussen het vlak en de contour. Klik <b>Contour toevoegen</b>. (Voor een afwerkrand om een embleem is <a href="#rand">Rand rondom het ontwerp</a> handiger.)</li>
+<li><b>Gaten:</b> klik <b>Gat maken — gebied markeren</b>. Zet punten om het gebied (links een hoek, rechts een curve) en druk <kbd>Enter</kbd>. Op die plek worden geen steken meer gezet. <b>Gaten sluiten</b> vult een gat weer.</li>
+<li><b>Overlap uitsnijden</b> (tabblad Vlakken): selecteer het bovenste vlak en klik de knop. De lagen eronder worden op die plek uitgesneden, zodat er geen dubbele dikke laag ontstaat.</li>
+</ul>
+
+<h2 id="letters">17. Letters</h2>
+<ol>
+<li>Open het tabblad <b>Letters</b> en typ je tekst.</li>
+<li>Kies het lettertype, de grootte en eventueel Vet. Je kunt de tekst ook op een boog zetten.</li>
+<li>Klik <b>Tekst als vlakken aan ontwerp toevoegen</b>.</li>
+</ol>
+<p>Met <b>Eigen TTF / OTF toevoegen</b> gebruik je een eigen lettertype. Favoriete lettertypes kun je bewaren. Voor kleine letters werken dikke, eenvoudige lettertypes het best. Puntjes en accenten worden vóór de letter zelf geborduurd.</p>
+
+<h2 id="volgorde">18. Volgorde</h2>
+<p>Op het tabblad <b>Volgorde</b> bepaal je welk onderdeel eerst geborduurd wordt. Sleep een onderdeel naar een andere plek of gebruik <b>Eerder ↑</b>, <b>Later ↓</b>, <b>Als eerste</b> en <b>Als laatste</b>. Klik daarna <b>Maak steken in gekozen volgorde</b>. Wat later komt, ligt bovenop.</p>
+<p>In de automatische stand kiest het programma zelf een volgorde: eerst dezelfde kleur, met zo kort mogelijke sprongen.</p>
+
+<h2 id="bewerken">19. Selecteren, verplaatsen, maat en steken bewerken</h2>
+<h3>Selecteren en verplaatsen</h3>
+<ul>
+<li><b>Selecteren:</b> klik op een onderdeel om het te kiezen (zie <a href="#onderdeel">Onderdeel aanklikken</a>), of sleep een rechthoek; met <kbd>Ctrl</kbd> voeg je toe aan de selectie. <kbd>Ctrl</kbd>+<kbd>A</kbd> selecteert alles.</li>
+<li><b>Verplaatsen:</b> kies Verplaatsen en sleep. De selectie beweegt in één keer, inclusief de tekening.</li>
+<li><b>Selectie 90°</b> of <b>Hele ontwerp 90° draaien</b>.</li>
+<li><b>Nieuwe kleur voor alleen de selectie.</b></li>
+</ul>
+<h3>Maat (tabblad Selectie en maat)</h3>
+<p>Alle maten zijn in millimeters: 60 mm = 6 cm. Vul de breedte of hoogte in; met <b>Verhouding behouden</b> past de andere maat zich vanzelf aan. Klik <b>Maat toepassen op selectie / hele ontwerp</b>. Selecteer je niets, dan verandert de maat van het hele ontwerp.</p>
+<p class="note">Vergroot of verklein je bestaande steken, dan verandert ook de dichtheid. Maak na een grote maatwijziging opnieuw steken uit de vlakken.</p>
+<h3>Losse steken (tabblad Bewerken)</h3>
+<ul>
+<li><b>Selectie verschuiven</b> met de opgegeven X/Y-waarden.</li>
+<li><b>Steektype toepassen:</b> verander geselecteerde punten in een borduursteek of een sprong.</li>
+<li><b>Geselecteerde steken verwijderen</b> (<kbd>Delete</kbd>).</li>
+<li><b>Coördinaten van één punt wijzigen</b>, <b>Garenkleur wijzigen</b>, <b>Patroon centreren</b>.</li>
+<li><b>Grote steken splitsen (max. 5 mm)</b>.</li>
+<li><b>Hele vlakken bewerken:</b> schalen en draaien, dupliceren, verwijderen, een laag omhoog of omlaag, en alle vlakken centreren in het raam.</li>
+</ul>
+
+<h2 id="simulatie">20. Simulatie</h2>
+<p>Onder het werkvlak kun je het borduren afspelen. Vink <b>Simulatie</b> aan en klik <b>Afspelen</b>. Kies de snelheid (Langzaam, Normaal of Snel), ga met <b>Eén stap</b> punt voor punt verder, of sleep de schuifbalk. <b>Begin</b> gaat terug naar het begin. Je ziet welke kleur er wordt geborduurd en of de machine een steek, sprong, knip of kleurwissel maakt.</p>
+<p>Bij een applicatie zie je in de simulatie precies waar de machine stopt.</p>
+
+<h2 id="bewaren">21. Stof kiezen, bewaren en naar de machine</h2>
+<h3>Stof kiezen</h3>
+<p>Bij opslaan of exporteren vraagt het programma welke stof je gebruikt, bijvoorbeeld badstof, tricot, jeans, fleece of vilt. Het past dan de dichtheid, trekcompensatie en onderlaag aan, en geeft advies over versteviging, topping en naald. Zie ook <b>STOFPROFIELEN.html</b>.</p>
+<p>Heb je losse steken met de hand bewerkt, laat dan <b>Bestaande steken behouden</b> aangevinkt. Anders worden de steken opnieuw berekend en gaan je handmatige wijzigingen verloren.</p>
+<h3>Bewaren</h3>
+<table>
+<tr><th>Knop</th><th>Resultaat</th></tr>
+<tr><td>Project opslaan (<kbd>Ctrl</kbd>+<kbd>S</kbd>)</td><td>Een BST-bestand met alles erin, om later verder te werken.</td></tr>
+<tr><td>EXP / PES exporteren</td><td>Een borduurbestand voor de machine. Bij EXP worden ook een INF- en een BMP-bestand gemaakt.</td></tr>
+<tr><td>Start borduren — tekening naar EXP / PES</td><td>Doet alles in één keer: stof kiezen, steken maken, controleren of het ontwerp in de ring past en het bestand bewaren.</td></tr>
+<tr><td>USB-stick / map kiezen + Opslaan op USB</td><td>Zet het borduurbestand direct op de USB-stick. Een bestaand bestand met dezelfde naam wordt eerst als reservekopie bewaard.</td></tr>
+<tr><td>Vlakken als SVG bewaren</td><td>De vlakken als vectortekening.</td></tr>
+</table>
+<p class="tip">Zet voor de Bernina 540 het <b>EXP-, INF- en BMP-bestand met dezelfde naam samen</b> op de USB-stick. Verwijder de USB-stick veilig uit Windows voordat je hem eruit haalt.</p>
+
+<h2 id="sneltoetsen">22. Sneltoetsen</h2>
+<table>
+<tr><th>Toets</th><th>Actie</th></tr>
+<tr><td><kbd>W</kbd></td><td>Toverstaf <span class="v26">2.6</span></td></tr>
+<tr><td><kbd>K</kbd></td><td>Mes <span class="nieuw">NIEUW</span></td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>G</kbd> / <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd></td><td>Groeperen / groep losmaken <span class="nieuw">NIEUW</span></td></tr>
+<tr><td><kbd>Alt</kbd>+klik</td><td>Eén onderdeel uit een groep kiezen <span class="nieuw">NIEUW</span></td></tr>
+<tr><td><kbd>Ctrl</kbd>+klik</td><td>Onderdeel aan de selectie toevoegen of eruit halen</td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>N</kbd></td><td>Nieuw ontwerp</td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>O</kbd></td><td>Openen</td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>S</kbd></td><td>Project opslaan</td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Ctrl</kbd>+<kbd>Y</kbd></td><td>Ongedaan maken / Opnieuw</td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>A</kbd></td><td>Alles selecteren</td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>V</kbd> / <kbd>Shift</kbd>+<kbd>V</kbd></td><td>Tekening plakken</td></tr>
+<tr><td><kbd>Shift</kbd>+<kbd>C</kbd></td><td>Afbeelding kopiëren</td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>9</kbd> / <kbd>Ctrl</kbd>+<kbd>1</kbd></td><td>Steekrichting 90° / 180°</td></tr>
+<tr><td><kbd>Enter</kbd></td><td>Vlak sluiten, steekrichting of richtingspijlen toepassen</td></tr>
+<tr><td><kbd>Backspace</kbd></td><td>Laatste punt weg tijdens het tekenen</td></tr>
+<tr><td><kbd>Esc</kbd></td><td>Tekenen annuleren</td></tr>
+<tr><td><kbd>Delete</kbd></td><td>Selectie, vlak of contourpunt verwijderen</td></tr>
+<tr><td>Middelste muisknop slepen</td><td>Werkvlak verschuiven</td></tr>
+</table>
+
+<h2 id="problemen">23. Problemen oplossen</h2>
+<table>
+<tr><th>Probleem</th><th>Oplossing</th></tr>
+<tr><td>Dunne lijnen worden niet of maar hier en daar gevuld.</td><td>Opgelost in 2.7: maak de steken opnieuw (<b>Borduur alle onderdelen</b>). Dunne lijnen krijgen nu vanzelf satijn die de lijn volgt. Kies voor een lijn eventueel zelf <b>Satijnsteek — volgt de vorm</b>. <span class="nieuw">NIEUW</span></td></tr>
+<tr><td>Ik wil de kleur van één vlak veranderen, maar er veranderen er meer.</td><td>Klik op het vlak en gebruik <b>Kleur wijzigen</b> in het vak <i>Geselecteerd onderdeel aanpassen</i>. <b>Garenkleur wijzigen</b> onder de garenkleurenlijst verandert alle onderdelen in die kleur. Zit het vlak in een groep, gebruik dan <kbd>Alt</kbd>+klik. <span class="nieuw">NIEUW</span></td></tr>
+<tr><td>Van tatami naar satijn lukt niet.</td><td>Klik op het vlak en kies bij <b>Steeksoort</b> <i>Satijnsteek</i> (voor lijnen) of <i>Satijnvulling</i> (voor vlakken). De steken worden meteen opnieuw gemaakt. <span class="nieuw">NIEUW</span></td></tr>
+<tr><td>Een richtingspijl wordt genegeerd.</td><td>Zet de pijl binnen het vlak of op de lijn. Stiklijnen en patroonvullingen hebben geen steekrichting. <span class="nieuw">NIEUW</span></td></tr>
+<tr><td>De toverstaf pakt te weinig.</td><td>Verhoog de <b>Kleurtolerantie</b>.</td></tr>
+<tr><td>De toverstaf pakt te veel, bijvoorbeeld ook het vlak ernaast.</td><td>Verlaag de <b>Kleurtolerantie</b>.</td></tr>
+<tr><td>Automatisch borduren geeft veel kleine snippers.</td><td>Verhoog <b>Kleine details weglaten</b> of verlaag het aantal kleuren.</td></tr>
+<tr><td>Er zijn steken verdwenen die ik wilde houden.</td><td>Zet <b>Kleine steken weglaten onder</b> op <i>uit</i> en maak de steken opnieuw.</td></tr>
+<tr><td>De statusregel is rood: punten buiten de ring.</td><td>Verklein het ontwerp, schuif het naar het midden (<b>Alle vlakken centreren in het raam</b>) of kies een grotere ring.</td></tr>
+<tr><td>Ware grootte klopt niet met de liniaal.</td><td>Controleer de schermvergroting van Windows (Instellingen → Beeldscherm → Schaal).</td></tr>
+<tr><td>Ik zie een tabblad niet.</td><td>Klik op de pijltjes naast de tabbladen, of maak het venster breder.</td></tr>
+<tr><td>Ik zie de tweede knoppenbalk niet.</td><td>Klik met rechts op een lege plek naast de knoppenbalken en vink <b>Extra functies</b> aan.</td></tr>
+<tr><td>Het programma start niet.</td><td>Kijk in <code>foutmelding.txt</code> in de programmamap en voer <b>Installatie_Ikkanborduren.bat</b> opnieuw uit.</td></tr>
+</table>
+
+<p class="small">Ikkanborduren 2.7.0 — november 2026. Zelfstandig programma voor eigen gebruik; geen BERNINA-, Hatch- of Wilcom-software. Een overzicht van de wijzigingen staan in WIJZIGINGEN_2_7_0.txt en WIJZIGINGEN_2_6_0.txt.</p>
+</html>

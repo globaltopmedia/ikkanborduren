@@ -1,0 +1,52 @@
+Ikkanborduren 2.6.0 — extra functies (november 2026)
+
+Nieuw tabblad "Extra" en een extra knoppenbalk (Toverstaf, Automatisch borduren,
+Rand toevoegen, Applicatie, Ware grootte, keuze Raam).
+
+1. Toverstaf (sneltoets W)
+   Klik op een kleurvlak in de afbeelding: dat deel wordt in één klik een
+   borduurvlak en meteen in steken omgezet. Instelbaar: kleurtolerantie (meer
+   gelijkende tinten meenemen), steek (automatisch, tatami, satijn, applicatie,
+   alleen lijn) en kleine gaatjes dichtzetten. Het vlak blijft bewerkbaar.
+
+2. Borduurraam op ware grootte
+   Medium 100 × 130, Large Oval 145 × 255 en Mega 150 × 400 worden als echte
+   ring getekend, met raamsjabloon (raster van 1 cm en middellijnen).
+   Knop "Ware grootte (100%)": 1 mm op het scherm = 1 mm in het echt
+   (volgens de schermresolutie van Windows; controleer met een liniaal).
+   Het borduurbereik is exact; de buitenkant van de ring is een illustratie.
+
+3. Automatisch borduren met 1 knop
+   Vereenvoudigt de kleuren, laat kleine details weg, laat te korte steken weg
+   (standaard onder 0,4 mm) en kiest per vlak: dunne lijn = stiklijn,
+   smal = satijn, breed = tatami. Optioneel: grote vlakken als applicatie.
+   Foto's naar borduursel is bewust niet toegevoegd.
+
+4. Afwerking: rand rondom het ontwerp
+   Satijnsteek (1–5 mm breed), enkele, dubbele of drievoudige stiklijn.
+   Afstand vanaf de buitenrand van het werk instelbaar (0–50 mm).
+   Vorm: volgt de vorm van het ontwerp, rechthoek, ovaal of cirkel.
+   Om het hele ontwerp of alleen de geselecteerde vlakken. De rand wordt als
+   laatste geborduurd. Opnieuw toevoegen vervangt de oude rand.
+
+5. Stiklijnen: enkel, dubbel (nieuw, heen en terug) of drievoudig
+   Ook te kiezen bij Steekvulling voor gewone lijnen en vlakken.
+
+6. Applicaties — automatisch of met de hand in delen
+   Per applicatiedeel: 1) plaatsingslijn, machine stopt (stof neerleggen),
+   2) vastzetsteek (open zigzag, dubbele of enkele stiklijn), machine stopt
+   (stof bijknippen), 3) satijnrand 1–5 mm. Rond uitsparingen blijft de opening
+   open. Maken door: geselecteerde vlakken omzetten, met de hand een deel
+   tekenen, de toverstaf, of automatisch borduren. Snijpatroon van alle delen
+   als SVG op ware grootte (print op 100%).
+   De stops zijn kleurwissels met dezelfde garenkleur; de kleurenlijst zegt
+   per stop wat je moet doen.
+
+Niet gedaan / let op
+- Nog niet op een echte Bernina 540 geborduurd: maak eerst een proeflap,
+  vooral voor applicaties (stops) en de rand.
+- Geen volledige Bernina DesignerPlus / Hatch: alleen de functies hierboven.
+- Foto-borduursel is niet toegevoegd (niet gevraagd).
+
+Tests: test_pro.py (25 tests). Volledige suite: 229 geslaagd. De 23 mislukte
+tests en 4 fouten bestonden al vóór deze versie (zie ontwikkelaarsnotitie).

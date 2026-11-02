@@ -1,0 +1,12 @@
+BorduurStudio 2.5.5 — gerichte verbetering vulrijen
+
+Wat is aangepast:
+- De generator voor vulrijen gebruikt niet langer een vaste steek-grid die vlak bij de linker- en rechterrand een heel kort reststukje kon veroorzaken.
+- De punten worden gelijkmatiger over elke rij verdeeld.
+- De rijgenerator vermijdt steken op de uiterste pixelrand en slaat extreem smalle rijsegmenten over.
+- De bestaande kleurverwerking is niet gewijzigd.
+
+Belangrijke beperking:
+Deze wijziging is een gerichte verbetering van de vulrijgenerator, geen garantie dat elk bestaand ontwerp automatisch goed wordt. De export- en machine-uitvoer konden in deze bouwomgeving niet volledig worden getest omdat pyembroidery en PySide6 ontbreken. Test eerst op een proeflapje met passende versteviging. Bewaar het oorspronkelijke EXP-bestand.
+
+Niet getest op een echte BERNINA 540. De EXP-export moet na installatie opnieuw worden gecontroleerd.
