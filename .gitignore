@@ -4,3 +4,7 @@ __pycache__/
 foutmelding.txt
 .claude/settings.local.json
 .DS_Store
+
+# Logo van derden (Bloemenhuis Bouman): niet publiceren
+Voorbeelden/Bloemenhuis.svg
+Downloads_scherm.png
