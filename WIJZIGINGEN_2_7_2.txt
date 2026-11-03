@@ -1,0 +1,8 @@
+Ikkanborduren 2.7.2 — minder sprongen, hoek met punt of komma
+
+- Minder sprongen en draadknippen binnen een vlak: verbindingen tussen rijen
+  en onderlaag/bovensteek worden nu gevonden, ook waar de vulling bewust
+  0,2 mm onder de rand doorloopt. Verbindingen lopen nooit door of langs een
+  uitgesneden overlapstuk.
+- Steekrichting typen: zowel 63,5 als 63.5 werkt, ongeacht de taal van Windows.
+- Alle automatische tests slagen weer (275).

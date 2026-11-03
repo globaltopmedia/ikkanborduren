@@ -22,10 +22,13 @@ def test_profile_underlay_precedes_top_and_export_max_length(profile,mode,tmp_pa
     layers=[r['layer'] for r in p.extras['route']];assert 'under' in layers
     assert max(i for i,x in enumerate(layers) if x=='under')<min(i for i,x in enumerate(layers) if x!='under')
     assert obj==original and p.extras['fabric_profile']==profile
+    # The 6 mm hole may only shrink by the profile's pull compensation plus
+    # the 0.2 mm fill allowance (rows reach just under the outline).
+    edge=3-float(fabric.apply([obj],profile)[0].get('compensation',0))-.2-1e-6
     previous=None
     for x,y,c in p.stitches:
         if previous and (c&emb.COMMAND_MASK)==emb.STITCH:
-            mid=((x+previous[0])/20,(y+previous[1])/20);assert not (-2.7<mid[0]<2.7 and -2.7<mid[1]<2.7)
+            mid=((x+previous[0])/20,(y+previous[1])/20);assert not (-edge<mid[0]<edge and -edge<mid[1]<edge)
         if (c&emb.COMMAND_MASK) in (emb.STITCH,emb.JUMP):previous=(x,y)
     assert core.export_bundle(p,tmp_path/(profile+mode+'.exp'),145,255,True).exists()
 

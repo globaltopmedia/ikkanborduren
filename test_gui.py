@@ -18,6 +18,8 @@ def app():
 @pytest.fixture
 def editor(app):
     w=Studio();w.load_path(str(Path(__file__).parent/'Voorbeelden'/'Schildpad.png'))
+    # Import keeps the original pixels; reduce colours explicitly first.
+    w.simplify();assert w.palette
     w.pattern=core.digitize(w.image,w.palette,60,underlay=False);w.refresh()
     yield w
     w.close()

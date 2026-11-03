@@ -18,6 +18,8 @@ def test_connected_ring_no_internal_jumps_and_underlay_first(tmp_path):
     layers=[r['layer'] for r in p.extras['route']]
     assert max(i for i,l in enumerate(layers) if l=='under')<min(i for i,l in enumerate(layers) if l!='under')
     mask,lo,_=design.raster_object(design.fabric.apply([obj],'fleece')[0])
+    # Fill rows deliberately reach 0.2 mm under the outline (core.digitize).
+    mask=design.ndimage.binary_dilation(mask,iterations=2)
     previous=None
     for x,y,c in p.stitches:
         if c&emb.COMMAND_MASK==emb.STITCH and previous is not None:

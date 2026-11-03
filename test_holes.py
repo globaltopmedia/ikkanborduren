@@ -23,7 +23,8 @@ def test_cut_and_close_keep_other_hole_and_roundtrip(tmp_path):
     for x,y,c in p.stitches:
         if c&emb.COMMAND_MASK==emb.STITCH and previous:
             middle=((x/10+previous[0])/2,(y/10+previous[1])/2)
-            assert not (-4.7<middle[0]<4.7 and -4.7<middle[1]<4.7)
+            # Hole edge may move by fleece pull compensation (0.25) + 0.2 mm fill allowance.
+            assert not (-4.55<middle[0]<4.55 and -4.55<middle[1]<4.55)
         if c&emb.COMMAND_MASK in (emb.STITCH,emb.JUMP):previous=(x/10,y/10)
     assert core.export_bundle(p,tmp_path/'hole.exp',145,255,True).exists()
     filled,_,n=edit_marked_holes(out,ids,box(-2,-2,2,2),'close')

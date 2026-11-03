@@ -497,6 +497,21 @@ def _fabric_underlay(obj):
             if len(run)>1:tasks.append(dict(points=run,layer='under',closed=False,component=None))
     return tasks
 
+def _join_mask(obj):
+    """Object raster, padded so endpoints just over the edge stay on the grid."""
+    mask,lo,_=raster_object(obj);pad=4
+    return np.pad(mask,pad),np.asarray(lo)-pad/10
+
+def _join_path(mask,lo,a,b):
+    """Connector inside the object. Fill rows end up to 0.2 mm over the
+    outline, so only a small disc around both endpoints may lie outside."""
+    from continuous_route import inside_path
+    a=(np.asarray(a)-lo)*10;b=(np.asarray(b)-lo)*10;mask=mask.copy();h,w=mask.shape
+    yy,xx=np.ogrid[:h,:w]
+    for q in (a,b):mask|=(xx-q[0])**2+(yy-q[1])**2<=9
+    path=inside_path(mask,a,b)
+    return None if path is None else [tuple(np.asarray(q)/10+lo) for q in path]
+
 def digitize_objects(objects,progress=None,optimize=True,min_jump=1.5,manual_order=False,fabric_key=None,min_stitch=0):
     """Greedy same-colour routing, respecting overlapping object order and local underlay.
     Running/cross tasks may reverse; generated fills preserve their local layer sequence.
@@ -612,11 +627,8 @@ def digitize_objects(objects,progress=None,optimize=True,min_jump=1.5,manual_ord
         connector=None
         obj=objects[t['object']]
         if last_object==t['id'] and not colour_changed and p.stitches and obj.get('closed',True) and not t.get('no_connector'):
-            if obj['id'] not in join_masks:join_masks[obj['id']]=raster_object(obj)[:2]
-            mask,lo=join_masks[obj['id']]
-            from continuous_route import inside_path
-            path=inside_path(mask,(np.asarray(last)-lo)*10,(np.asarray(pts[0])-lo)*10)
-            if path is not None:connector=[tuple(np.asarray(q)/10+lo) for q in path]
+            if obj['id'] not in join_masks:join_masks[obj['id']]=_join_mask(obj)
+            mask,lo=join_masks[obj['id']];connector=_join_path(mask,lo,last,pts[0])
         # Adjacent pieces of the same dense fill can sew through their union.
         # Never bridge an empty gap or patterned/open area.
         if connector is None and last_object and last_object!=t['id'] and not colour_changed and obj.get('fill') in ('fill','both'):
@@ -624,15 +636,19 @@ def digitize_objects(objects,progress=None,optimize=True,min_jump=1.5,manual_ord
             if previous.get('fill') in ('fill','both') and previous.get('closed',True) and obj.get('closed',True):
                 masks=[]
                 for member in (previous,obj):
-                    if member['id'] not in join_masks:join_masks[member['id']]=raster_object(member)[:2]
+                    if member['id'] not in join_masks:join_masks[member['id']]=_join_mask(member)
                     masks.append(join_masks[member['id']])
                 lo=np.minimum(masks[0][1],masks[1][1]);hi=np.maximum(*[origin+np.asarray(mask.shape[::-1])/10 for mask,origin in masks])
                 size=np.ceil((hi-lo)*10).astype(int);union=np.zeros((size[1],size[0]),bool)
                 for mask,origin in masks:
                     x,y=np.rint((origin-lo)*10).astype(int);union[y:y+mask.shape[0],x:x+mask.shape[1]]|=mask
-                from continuous_route import inside_path
-                path=inside_path(union,(np.asarray(last)-lo)*10,(np.asarray(pts[0])-lo)*10)
-                if path is not None:connector=[tuple(np.asarray(q)/10+lo) for q in path]
+                connector=_join_path(union,lo,last,pts[0])
+        if connector is not None and (obj.get('overlap_exclusions') or (last_object and next((o for o in objects if o['id']==last_object),{}).get('overlap_exclusions'))):
+            # Never travel through (or along) an area cut away for a newer part.
+            from overlap_ui import exclusion_path
+            from PySide6.QtCore import QPointF
+            cuts=[exclusion_path(o) for o in objects if o['id'] in (obj['id'],last_object) and o.get('overlap_exclusions')]
+            if any(cut.contains(QPointF(x*10,y*10)) for cut in cuts for x,y in subdivide(connector,.05)):connector=None
         join=connector is not None
         connector_length=0
         if join:
