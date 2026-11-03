@@ -129,3 +129,20 @@ def test_gui_wand_auto_border_applique_roundtrip(window, tmp_path):
     path = tmp_path / 'p.bst'; core.save_project(str(path), w.image, w.palette, w.pattern, w.settings())
     w.load_path(str(path)); assert sum(o['fill'] == 'applique' for o in w.objects) == 1 and w.min_stitch.value() == .4
     w.remove_border(); wait(w, app); assert not any(o.get('border') for o in w.objects)
+
+
+def test_auto_colours_stay_true_instead_of_blending():
+    # A cartoon with more flat colours than the palette may hold: the chosen
+    # thread colours must be colours of the drawing, not brownish averages.
+    from PIL import Image, ImageDraw
+    import core
+    im = Image.new('RGB', (300, 200), 'white'); d = ImageDraw.Draw(im)
+    flat = ['#0254b6', '#93d3fd', '#db1012', '#f7a121', '#feeb12', '#3ab329', '#020202']
+    for i, c in enumerate(flat):d.rectangle((10 + i * 40, 20, 40 + i * 40, 180 - i * 15), fill=c, outline='#020202', width=2)
+    _, palette = core.prepare_image(im, 6, True)
+    source = [tuple(int(c[k:k + 2], 16) for k in (1, 3, 5)) for c in flat]
+    assert len(palette) == 6
+    for colour in palette:
+        assert min(sum((a - b) ** 2 for a, b in zip(colour, s)) for s in source) <= 12   # an exact colour of the drawing
+    _, palette = core.prepare_image(im, 10, True)
+    assert len(palette) == 7

@@ -1,0 +1,17 @@
+Ikkanborduren 2.7.4 — echte kleuren, één knop voor de borduurvolgorde
+
+- Automatisch borduren houdt de echte kleuren van de tekening. Voorheen werden
+  kleuren gemiddeld, waardoor bijvoorbeeld rood en blauw samen een bruinpaarse
+  draad werden. Nu kiest het programma de grote, vlakke kleuren zoals ze in de
+  tekening staan; kleine randpixels worden nooit een eigen garenkleur.
+  Standaard maximaal 10 kleuren (was 6).
+- Toverstaf: elke klik nam de gemiddelde kleur van het aangeklikte deel over,
+  zodat zes gele vlakken zes net verschillende gelen werden, en dus zes
+  garenwissels. Een nieuw vlak krijgt nu de garenkleur van een bestaand vlak
+  met dezelfde tint.
+- Nieuwe knop: Volgorde optimaliseren (Ctrl+Shift+O). Voegt gelijke tinten
+  samen tot één garenkleur, zet de volgorde op automatisch (elke kleur in één
+  keer, korte sprongen, korte sprong naar de volgende kleur) en maakt de
+  steken opnieuw. Ongedaan zet alles terug.
+  Voorbeeld polobeer met toverstaf: 44 -> 9 kleurblokken, 986 -> 528 mm springen.
+- Projectbestanden noemen weer het juiste versienummer.

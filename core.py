@@ -9,7 +9,40 @@ from scipy import ndimage
 import contourpy
 import pyembroidery as emb
 
-VERSION='2.5.6-tatami-overlap'
+VERSION='2.7.4'
+
+def to_lab(rgb):
+    """sRGB (0-255) to CIE Lab, so colour distances match what the eye sees."""
+    c=np.asarray(rgb,np.float32)/255.
+    c=np.where(c>.04045,((c+.055)/1.055)**2.4,c/12.92)
+    xyz=c@np.array([[.4124,.2126,.0193],[.3576,.7152,.1192],[.1805,.0722,.9505]],np.float32)
+    xyz/=np.array([.95047,1.,1.08883],np.float32)
+    f=np.where(xyz>.008856,np.cbrt(xyz),7.787*xyz+16/116)
+    return np.stack([116*f[...,1]-16,500*(f[...,0]-f[...,1]),200*(f[...,1]-f[...,2])],axis=-1)
+
+def dominant_colours(pixels,colors,separation=18.,minimum_share=.002):
+    """The real flat colours of a drawing, at most `colors`.
+    Unlike averaging (median cut), every chosen colour is a colour that really
+    occurs in large areas, so red, blue and green stay red, blue and green
+    instead of melting into brownish mixtures. Anti-aliased edge pixels are
+    rare and therefore never become a thread colour of their own."""
+    px=np.asarray(pixels,np.uint8).reshape(-1,3)
+    keys=(px[:,0].astype(np.int32)>>3)<<10|(px[:,1].astype(np.int32)>>3)<<5|(px[:,2].astype(np.int32)>>3)
+    bins,inverse,counts=np.unique(keys,return_inverse=True,return_counts=True)
+    sums=np.zeros((len(bins),3));np.add.at(sums,inverse,px.astype(np.float64))
+    means=sums/counts[:,None]
+    order=np.argsort(-counts)[:3000];means=means[order];counts=counts[order]
+    lab=to_lab(means);total=float(len(px))
+    d=np.sqrt(((lab[:,None,:]-lab[None,:,:])**2).sum(axis=2))
+    support=(counts[None,:]*(d<separation*.6)).sum(axis=1)
+    chosen=[]
+    for i in np.argsort(-support,kind='stable'):
+        if len(chosen)>=colors:break
+        if chosen and support[i]<minimum_share*total:break
+        if all(d[i,j]>=separation for j in chosen):chosen.append(i)
+    # Within each chosen colour family use its most frequent exact shade.
+    best=[min(np.nonzero(d[i]<separation*.6)[0]) for i in chosen]
+    return [tuple(int(round(v)) for v in means[i]) for i in best]
 
 def prepare_image(image, colors=8, remove_background=True):
     im=image.convert('RGBA').copy();im.thumbnail((1600,1600))
@@ -35,15 +68,11 @@ def prepare_image(image, colors=8, remove_background=True):
         labels=np.full(visible.shape,-1,dtype=np.int32)
         labels[visible]=inverse
     else:
-        samples=pixels[visible].reshape(1,-1,3)
-        sample_image=Image.fromarray(samples.astype(np.uint8))
-        q=sample_image.quantize(colors=int(colors),method=Image.Quantize.MEDIANCUT,dither=Image.Dither.NONE)
-        indices=np.array(q).ravel();raw=np.array(q.getpalette(),np.uint8).reshape(-1,3)
-        used=np.unique(indices);palette=[tuple(map(int,raw[k])) for k in used]
-        pal=np.array(palette,np.float32)
+        palette=dominant_colours(pixels[visible],int(colors))
+        pal=to_lab(np.array(palette,np.float32))
         labels=np.empty(visible.shape,np.int16)
         for row in range(0,pixels.shape[0],64):
-            block=pixels[row:row+64].astype(np.float32)
+            block=to_lab(pixels[row:row+64].astype(np.float32))
             labels[row:row+64]=np.argmin(((block[:,:,None,:]-pal[None,None,:,:])**2).sum(axis=3),axis=2)
         labels[~visible]=-1
         labels=ndimage.median_filter(labels,size=3);labels[~visible]=-1

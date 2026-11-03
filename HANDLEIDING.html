@@ -151,6 +151,14 @@ nav ol{margin:6px 0;columns:2}
 <p>Lassen is het omgekeerde van het mes. Selecteer twee of meer vlakken in <b>dezelfde garenkleur</b> (<kbd>Ctrl</kbd>+klik of een rechthoek slepen) en klik <b>Lassen</b> (<kbd>Ctrl</kbd>+<kbd>L</kbd>). Vlakken die elkaar raken of overlappen (ook met een haarfijne spleet tot 0,3 mm) worden één onderdeel, dat in één keer zonder sprong wordt geborduurd. Vlakken die de rest niet raken, blijven een los deel. Handig voor zwarte omlijningen die met de toverstaf in stukjes zijn aangeklikt.</p>
 <h3>Borduurvolgorde: per kleur, dichtstbijzijnde verbinden <span class="nieuw">NIEUW</span></h3>
 <p>Bij <b>Volgorde: automatisch</b> borduurt het programma elke garenkleur in één keer af, van licht naar donker, zodat de zwarte omlijning als laatste over de naden komt. De volgorde waarin je de vlakken hebt aangeklikt maakt niet meer uit. Binnen een kleur gaat de naald langs de kortste route, en elk volgend vlak begint zo dicht mogelijk bij het eind van het vorige. Alleen als een onderdeel echt <i>op</i> een ander ligt (bijvoorbeeld een neus op een gezicht), blijft de bovenste als laatste.</p>
+<h3>Knop: Volgorde optimaliseren <span class="nieuw">NIEUW 2.7.4</span></h3>
+<p>Klik <b>Volgorde optimaliseren</b> in de tweede knoppenbalk (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>O</kbd>) of de knop <i>Borduurvolgorde optimaliseren</i> onder de onderdelenlijst. In één keer gebeurt dan het volgende:</p>
+<ul>
+<li>Tinten die er hetzelfde uitzien (bijvoorbeeld zes net iets verschillende gelen van zes toverstafklikken) worden één garenkleur. De tint met het grootste oppervlak blijft.</li>
+<li>De volgorde gaat op <b>automatisch</b>: elke kleur in één keer, met korte sprongen binnen de kleur en een korte sprong naar de volgende kleur.</li>
+<li>De steken worden direct opnieuw gemaakt. Met <b>Ongedaan</b> zet je alles terug.</li>
+</ul>
+<p>Nieuwe toverstafklikken krijgen voortaan zelf al de garenkleur van een bestaand vlak met dezelfde tint.</p>
 
 <h2 id="toverstaf">6. Toverstaf <span class="v26">2.6</span></h2>
 <p>Met de toverstaf maak je met één klik een borduurvlak van een deel van de tekening. Klik je bijvoorbeeld op een blauw vlak, dan wordt dat blauwe deel in één keer omgezet en meteen in steken getoond.</p>
@@ -187,7 +195,7 @@ nav ol{margin:6px 0;columns:2}
 </ol>
 <table>
 <tr><th>Instelling</th><th>Betekenis</th></tr>
-<tr><td>Maximaal aantal kleuren</td><td>Minder kleuren geeft minder garenwissels en een rustiger ontwerp.</td></tr>
+<tr><td>Maximaal aantal kleuren</td><td>Standaard 10. Het programma neemt de echte kleuren van de tekening over (rood blijft rood, blauw blijft blauw). Heeft de tekening meer kleuren dan dit getal, dan vallen de kleinste kleurvlakken weg en krijgen die de dichtstbijzijnde kleur. Minder kleuren geeft minder garenwissels.</td></tr>
 <tr><td>Kleine details weglaten</td><td>Vlakjes kleiner dan dit oppervlak (in mm²) worden weggelaten. Verhoog de waarde als er te veel kleine snippers ontstaan.</td></tr>
 <tr><td>Kleine steken weglaten onder</td><td>Steken korter dan deze lengte worden samengevoegd met de steek ernaast. Automatisch borduren zet deze waarde op 0,4 mm als hij op <i>uit</i> stond. De instelling geldt daarna ook voor <i>Maak steken uit alle vlakken</i>. Zet hem terug op <i>uit</i> als je alle steken wilt houden.</td></tr>
 <tr><td>Grote vlakken als applicatie vanaf</td><td>Vlakken die groter zijn dan dit oppervlak worden een <a href="#applicatie">applicatie</a> in plaats van een dichte vulling. Dat bespaart veel steken bij grote vlakken. Standaard staat dit <i>uit</i>.</td></tr>
@@ -430,6 +438,7 @@ nav ol{margin:6px 0;columns:2}
 <tr><td><kbd>W</kbd></td><td>Toverstaf <span class="v26">2.6</span></td></tr>
 <tr><td><kbd>K</kbd></td><td>Mes <span class="nieuw">NIEUW</span></td></tr>
 <tr><td><kbd>Ctrl</kbd>+<kbd>L</kbd></td><td>Lassen <span class="nieuw">NIEUW</span></td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>O</kbd></td><td>Borduurvolgorde optimaliseren <span class="nieuw">NIEUW</span></td></tr>
 <tr><td><kbd>Ctrl</kbd>+<kbd>G</kbd> / <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd></td><td>Groeperen / groep losmaken <span class="nieuw">NIEUW</span></td></tr>
 <tr><td><kbd>Alt</kbd>+klik</td><td>Eén onderdeel uit een groep kiezen <span class="nieuw">NIEUW</span></td></tr>
 <tr><td><kbd>Ctrl</kbd>+klik</td><td>Onderdeel aan de selectie toevoegen of eruit halen</td></tr>

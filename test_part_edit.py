@@ -280,3 +280,29 @@ def test_gui_weld(monkeypatch):
     w.select_part(a['id']); w.select_part(c['id'], add=True); w.weld_parts()
     assert errors and 'dezelfde garenkleur' in str(errors[-1])
     w.close()
+
+
+def test_same_looking_tints_become_one_thread():
+    # Toverstaf clicks average slightly different pixels: #fae90e vs #fbe910.
+    parts = [square_at(0, 0, 10, 10, '#fae90e'), square_at(20, 0, 25, 5, '#fbe910'), square_at(40, 0, 45, 5, '#f8e80c'),
+             square_at(0, 20, 5, 25, '#040404'), square_at(20, 20, 25, 25, '#100f0e'), square_at(40, 20, 45, 25, '#da0f11')]
+    assert design.matching_colour('#fbe910', ['#da0f11', '#fae90e']) == '#fae90e'
+    assert design.matching_colour('#da0f11', ['#fae90e', '#040404']) is None
+    assert design.unify_colours(parts) == 3
+    assert [p['color'] for p in parts] == ['#fae90e'] * 3 + ['#040404'] * 2 + ['#da0f11']   # largest area wins
+    p = design.digitize_objects(parts)
+    assert len(p.threadlist) == 3
+
+
+def test_gui_optimise_order(monkeypatch):
+    from PySide6.QtWidgets import QApplication
+    app = QApplication.instance() or QApplication([])
+    from studio2 import Studio2
+    w = Studio2(); w.fabric_dialog = lambda: ('standard', True)
+    w.objects = [square_at(0, 0, 10, 10, '#fae90e'), square_at(30, 0, 35, 5, '#da0f11'), square_at(20, 0, 25, 5, '#fbe910')]
+    w.order_mode.setCurrentIndex(1)
+    launched = []; monkeypatch.setattr(w, 'launch_objects', lambda **k: launched.append(k))
+    w.optimise_order()
+    assert {o['color'] for o in w.objects} == {'#fae90e', '#da0f11'} and w.order_mode.currentIndex() == 0 and launched
+    w.undo(); assert {o['color'] for o in w.objects} == {'#fae90e', '#da0f11', '#fbe910'}
+    w.close()

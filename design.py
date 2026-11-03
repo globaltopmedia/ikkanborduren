@@ -499,6 +499,39 @@ def _objects_cover(a,b,cache):
     shared=int(np.count_nonzero(am[pa[1]:pa[1]+h,pa[0]:pa[0]+w]&bm[pb[1]:pb[1]+h,pb[0]:pb[0]+w]))
     return shared>=max(4,.03*min(aa_,ba_))
 
+def _hex_rgb(colour):
+    return [int(colour[i:i+2],16) for i in (1,3,5)]
+
+def matching_colour(colour,existing,separation=12.):
+    """An existing thread colour that looks the same as `colour` (CIE Lab
+    distance below `separation`), else None."""
+    import core
+    existing=[c for c in dict.fromkeys(existing) if c]
+    if not existing:return None
+    lab=core.to_lab(np.array([_hex_rgb(colour)]+[_hex_rgb(c) for c in existing],np.float32))
+    d=np.sqrt(((lab[1:]-lab[0])**2).sum(axis=1));i=int(np.argmin(d))
+    return existing[i] if d[i]<separation else None
+
+def _area(obj):
+    pts=np.asarray(flattened(obj['nodes'],obj.get('closed',True)) or [(0,0)],float)
+    if len(pts)<3:return 1.
+    x,y=pts[:,0],pts[:,1];return abs(float(np.dot(x,np.roll(y,1))-np.dot(y,np.roll(x,1))))/2+1.
+
+def unify_colours(objects,separation=12.):
+    """Give parts that only differ by an invisible tint (e.g. each toverstaf
+    click averages slightly different pixels) one and the same thread colour,
+    so they are sewn in one colour block. The colour covering the largest
+    area wins. Returns the number of parts that changed colour."""
+    area={}
+    for obj in objects:area[obj['color']]=area.get(obj['color'],0.)+_area(obj)
+    chosen={}
+    for colour in sorted(area,key=lambda c:-area[c]):
+        chosen[colour]=matching_colour(colour,list(dict.fromkeys(chosen.values())),separation) or colour
+    changed=0
+    for obj in objects:
+        if chosen[obj['color']]!=obj['color']:obj['color']=chosen[obj['color']];changed+=1
+    return changed
+
 def _lightness(colour):
     r,g,b=(int(colour[i:i+2],16) for i in (1,3,5));return .299*r+.587*g+.114*b
 

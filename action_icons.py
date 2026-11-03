@@ -33,6 +33,7 @@ DRAWINGS = {
  'knife':'<path d="M3 21L14 10l3 3-11 9z" fill="#edb248"/><path d="M14 10l6-7 1 1-4 9"/><path d="M2 14l3-3M9 3l-2 6" stroke-dasharray="2 2"/>',
  'weld':'<path d="M3 12h7M14 12h7" stroke-width="3"/><circle cx="12" cy="12" r="3" fill="#edb248"/><path d="M12 3v3M12 18v3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"/>',
  'group':'<rect x="2" y="2" width="20" height="20" rx="2" stroke-dasharray="3 2"/><rect x="5" y="5" width="7" height="7" fill="#edb248"/><circle cx="15.5" cy="15.5" r="3.5" fill="#9fd3c7"/>',
+ 'order':'<circle cx="5" cy="6" r="2.5" fill="#edb248"/><circle cx="12" cy="12" r="2.5" fill="#edb248"/><circle cx="19" cy="18" r="2.5" fill="#9fd3c7"/><path d="M7 7.5l3 3M14 13.5l3 3" stroke-dasharray="1.5 1.5"/>',
  'hoop':'<ellipse cx="12" cy="12" rx="8" ry="10"/><ellipse cx="12" cy="12" rx="5.5" ry="7.5" stroke-dasharray="2 2"/><path d="M20 10h3v4h-3"/>',
 }
 
@@ -41,6 +42,7 @@ def key(text):
  if t=='mes' or t.startswith('mes:') or t.startswith('mes ('):return 'knife'
  if 'groep' in t or 'groeperen' in t:return 'group'
  if t.startswith('lassen'):return 'weld'
+ if 'volgorde optimaliseren' in t:return 'order'
  if 'overlap uitsnijden' in t:return 'overlap'
  if 'steekrichting' in t:return 'direction'
  if 'gat' in t:return 'close_hole' if 'sluit' in t else 'hole'

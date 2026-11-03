@@ -33,7 +33,7 @@ class ProUI:
         note = QLabel('Klik op een kleurvlak in de afbeelding. Hogere tolerantie neemt meer gelijkende tinten mee. Het vlak blijft daarna gewoon bewerkbaar.'); note.setWordWrap(True); f.addRow(note)
 
         box = QGroupBox('Automatisch borduren — 1 knop'); f = QFormLayout(box); lay.addWidget(box)
-        self.auto_colors = QSpinBox(); self.auto_colors.setRange(2, 16); self.auto_colors.setValue(6); f.addRow('Maximaal aantal kleuren', self.auto_colors)
+        self.auto_colors = QSpinBox(); self.auto_colors.setRange(2, 16); self.auto_colors.setValue(10); f.addRow('Maximaal aantal kleuren', self.auto_colors)
         self.auto_detail = self.number(0, 50, 2, ' mm²', 1); f.addRow('Kleine details weglaten', self.auto_detail)
         self.min_stitch = self.number(0, 1.5, 0, ' mm', 2); self.min_stitch.setSpecialValueText('uit'); f.addRow('Kleine steken weglaten onder', self.min_stitch)
         self.auto_applique = self.number(0, 500, 0, ' cm²', 0); self.auto_applique.setSpecialValueText('uit'); f.addRow('Grote vlakken als applicatie vanaf', self.auto_applique)
@@ -122,6 +122,10 @@ class ProUI:
                 elif key == 'applique':pro_tools.make_applique(obj, self.applique_cover.value(), self.applique_tack.currentData())
                 else:obj['fill'] = key
                 obj['name'] = f'Toverstaf {len(self.objects) + 1}'
+                # Same-looking tint as an existing part: use that thread, so the
+                # parts are sewn in one colour block instead of one block per click.
+                same = design.matching_colour(obj['color'], [o['color'] for o in self.objects])
+                if same:obj['color'] = same
                 design.validate_object(obj)
         except Exception as e:return self.error(e)
         self.checkpoint(); self.objects.extend(objects)

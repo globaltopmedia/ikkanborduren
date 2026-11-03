@@ -103,6 +103,7 @@ class PartEditUI:
         self.button(row, 'Groeperen', self.group_parts); self.button(row, 'Groep losmaken', self.ungroup_parts)
         self.button(lay, 'Mes: onderdeel in delen snijden', self.start_knife)
         self.button(lay, 'Lassen: aanrakende vlakken (zelfde kleur) samenvoegen', self.weld_parts)
+        self.button(lay, 'Borduurvolgorde optimaliseren: gelijke kleuren samen, korte sprongen', self.optimise_order)
         self.part_live = QCheckBox('Steken direct opnieuw maken na een wijziging'); self.part_live.setChecked(True); lay.addWidget(self.part_live)
         dock_layout = self.parts_list.parentWidget().layout(); dock_layout.insertWidget(dock_layout.indexOf(self.parts_list) + 1, box)
         self.part_box = box
@@ -118,6 +119,7 @@ class PartEditUI:
             action = QAction('Groeperen', self); action.setShortcut(QKeySequence('Ctrl+G')); action.triggered.connect(self.group_parts); toolbar.addAction(action)
             action = QAction('Groep losmaken', self); action.setShortcut(QKeySequence('Ctrl+Shift+G')); action.triggered.connect(self.ungroup_parts); toolbar.addAction(action)
             action = QAction('Lassen', self); action.setShortcut(QKeySequence('Ctrl+L')); action.triggered.connect(self.weld_parts); toolbar.addAction(action)
+            action = QAction('Volgorde optimaliseren', self); action.setShortcut(QKeySequence('Ctrl+Shift+O')); action.triggered.connect(self.optimise_order); toolbar.addAction(action)
         from action_icons import install_icons
         install_icons(self)
 
@@ -411,6 +413,22 @@ class PartEditUI:
         message = (f'Gelast: {len(targets)} vlakken zijn nu {len(pieces)} onderdelen; {apart} deel/delen raakten de rest niet en bleven los.' if apart
                    else f'Gelast: {len(targets)} vlakken zijn nu één onderdeel en worden zonder sprong geborduurd.')
         self.regenerate_after_edit(message)
+
+    # Borduurvolgorde -------------------------------------------------
+    def optimise_order(self):
+        """One button: tints that look the same become one thread colour,
+        every colour is sewn in one go with short jumps, and the colours
+        follow each other with a short jump too."""
+        if self.worker and self.worker.isRunning():return
+        if not self.objects:return self.error('Maak eerst bewerkbare vlakken (bijvoorbeeld met de toverstaf of Automatisch borduren).')
+        before = len({o['color'] for o in self.objects})
+        self.checkpoint(); changed = design.unify_colours(self.objects); after = len({o['color'] for o in self.objects})
+        self.order_mode.blockSignals(True); self.order_mode.setCurrentIndex(0); self.order_mode.blockSignals(False)
+        self.optimize.setChecked(True); self.generation_scope = None
+        self.mark_objects_changed(); self.sync_object_controls(); self.refresh()
+        message = (f'Volgorde geoptimaliseerd: {before} tinten zijn {after} garenkleuren; iedere kleur in één keer met korte sprongen.' if changed
+                   else f'Volgorde geoptimaliseerd: {after} garenkleuren, iedere kleur in één keer met korte sprongen.')
+        self.launch_objects(checkpoint=False, after=lambda: self.status.setText(message))
 
     # Mes ---------------------------------------------------------------
     def start_knife(self):
