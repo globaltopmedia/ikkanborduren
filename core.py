@@ -107,6 +107,54 @@ def _spans(mask,spacing):
         active=current
     return groups
 
+def _group_cover(rows,shape,spacing):
+    """Pixels a group of tatami rows will cover (rows are spacing apart)."""
+    cover=np.zeros(shape,bool);half=max(1,int(math.ceil(spacing/2)))
+    for left,right,y in rows:
+        y=int(y);cover[max(0,y-half):y+half+1,max(0,int(left)):int(right)+1]=True
+    return cover
+
+def _ordered_fill(region,travel,groups,max_stitch,ox,oy,spacing,start=None):
+    """Sew all tatami groups of one area as one continuous path.
+
+    Each group is sewn in serpentine rows. The next group is the nearest
+    one that can be reached by travelling through area that is still to be
+    filled (or along the outer edge), so every travel stitch is hidden under
+    later rows instead of lying on top of finished fill.
+    """
+    from continuous_route import inside_path
+    items=[]
+    for rows in groups:
+        pts=_fill_points(rows,max_stitch,0,0)
+        if len(pts)>1:items.append((pts,_group_cover(rows,region.shape,spacing)))
+    if not items:return []
+    edge=travel&~ndimage.binary_erosion(region,iterations=4)
+    done=np.zeros(region.shape,bool);path=[];current=None if start is None else (start[0]-ox,start[1]-oy)
+    def entries(k):
+        pts=items[k][0];return [(pts,pts[0]),(pts[::-1],pts[-1])]
+    left=list(range(len(items)))
+    while left:
+        if current is None:
+            # Start at the group nearest the top-left of the area.
+            k=min(left,key=lambda k:min(q[1]*1000+q[0] for _,q in entries(k)));pts=items[k][0];connector=None
+        else:
+            options=sorted(((math.dist(current,q),k,pts) for k in left for pts,q in entries(k)),key=lambda z:z[0])
+            allowed=(travel&~done)|edge;choice=None
+            for _,k,pts in options[:12]:
+                mask=allowed.copy()
+                for q in (current,pts[0]):
+                    x,y=int(round(q[0])),int(round(q[1]))
+                    mask[max(0,y-3):y+4,max(0,x-3):x+4]=travel[max(0,y-3):y+4,max(0,x-3):x+4]
+                connector=inside_path(mask,current,pts[0])
+                if connector is not None:choice=(k,pts);break
+            if choice is None:
+                _,k,pts=options[0];connector=inside_path(travel,current,pts[0])
+            else:k,pts=choice
+            if connector is None:return None  # disconnected: caller sews groups separately
+        if connector:path.extend(tuple(map(float,q)) for q in connector[1:-1])
+        path.extend(pts);current=pts[-1];done|=items[k][1];left.remove(k)
+    return [(x+ox,y+oy) for x,y in path]
+
 def clone_pattern(p):
     if p is None:return None
     import copy
@@ -131,7 +179,7 @@ def _fill_points(rows,max_stitch,ox,oy):
         span=r-l
         # Do not create dense clusters in tiny fragments; narrow details need
         # a satin/run treatment rather than a row of machine-stalling stitches.
-        if span < 12.0:
+        if span < 5.0:
             continue
         intervals=max(1,int(math.ceil(span/target)))
         step=span/intervals
@@ -143,9 +191,9 @@ def _fill_points(rows,max_stitch,ox,oy):
             xs=[l+step*i for i in range(intervals+1)]
         # Remove any near-duplicate points and keep all segments safely above
         # 0.8 mm; evenly distributed endpoints prevent tiny remainder stitches.
-        row=[]
+        row=[];gap=min(8.0,span*.99)
         for x in xs:
-            if not row or x-row[-1] >= 8.0:
+            if not row or x-row[-1] >= gap:
                 row.append(x)
         if len(row)<2:
             continue
@@ -153,7 +201,9 @@ def _fill_points(rows,max_stitch,ox,oy):
             row.reverse()
         for x in row:
             q=(x+ox,float(y)+oy)
-            if not points or math.dist(points[-1],q)>=8.0:
+            # Keep the edge penetration of every row (rows end neatly at the
+            # outline); only drop true duplicates.
+            if not points or math.dist(points[-1],q)>=3.0:
                 points.append(q)
     return points
 
@@ -200,6 +250,7 @@ def nearest_entry(tasks,reference,pending):
         pts=t['points']
         if t.get('closed'):
             arr=np.asarray(pts);dist=((arr-np.asarray(reference))**2).sum(axis=1);j=int(np.argmin(dist));distance=float(np.sqrt(dist[j]));candidate=(distance,i,j)
+        elif t.get('fixed'):candidate=(math.dist(reference,pts[0]),i,0)
         else:
             a,b=math.dist(reference,pts[0]),math.dist(reference,pts[-1]);candidate=(min(a,b),i,-1 if b<a else 0)
         if choice is None or candidate<choice:choice=candidate
@@ -263,8 +314,16 @@ def digitize(image,palette,width_mm=100,spacing=.45,max_stitch=2.5,underlay=True
             if mode in ('fill','both'):
                 if underlay and region.sum()>1800 and min(region.shape)>=24:
                     local=ndimage.binary_erosion(region,iterations=3)
-                    for rows in _spans(local,24):task(_fill_points(rows,max_stitch,ox,oy),'under')
-                for rows in _spans(region,spacing*10):task(_fill_points(rows,max_stitch,ox,oy),'top')
+                    groups=_spans(local,24)
+                    ordered=_ordered_fill(local,travel,groups,max_stitch,ox,oy,24) if len(groups)>1 else None
+                    if ordered:task(ordered,'under');tasks[-1]['fixed']=True
+                    else:
+                        for rows in groups:task(_fill_points(rows,max_stitch,ox,oy),'under')
+                groups=_spans(region,spacing*10)
+                ordered=_ordered_fill(region,travel,groups,max_stitch,ox,oy,spacing*10) if len(groups)>1 else None
+                if ordered:task(ordered,'top');tasks[-1]['fixed']=True
+                else:
+                    for rows in groups:task(_fill_points(rows,max_stitch,ox,oy),'top')
             if mode in ('satin','both'):
                 # Slight allowance for diagonals and 0.1 mm machine quantisation.
                 band=min(satin_width*10,48)
@@ -278,7 +337,7 @@ def digitize(image,palette,width_mm=100,spacing=.45,max_stitch=2.5,underlay=True
             if t['closed']:
                 points=points[entry:]+points[:entry];points=points+[points[0]]
             elif entry==-1:points=list(reversed(points))
-            route.append({'color':block,'jump_mm':distance/10,'layer':t['layer'],'component':t['component'],'start':len(p.stitches)})
+            route.append({'color':block,'jump_mm':distance/10,'layer':t['layer'],'component':t['component'],'start':len(p.stitches),'fixed':bool(t.get('fixed'))})
             ox,oy=t['offset'];travel=t['travel']
             connector=None if last is None else inside_path(travel,(last[0]-ox,last[1]-oy),(points[0][0]-ox,points[0][1]-oy))
             if connector is not None:

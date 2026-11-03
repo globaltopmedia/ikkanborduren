@@ -363,17 +363,26 @@ class Studio(QMainWindow):
                 item=scene.addPixmap(pixmap(self.image));item.setScale(w/self.image.width);item.setPos(-w/2+getattr(self,'image_offset',[0,0])[0]*10,-h/2+getattr(self,'image_offset',[0,0])[1]*10);item.setOpacity(.28 if self.pattern and self.show_sew.isChecked() else 1)
         else:self.height_label.setText('—')
         if self.pattern and self.show_sew.isChecked():
-            paths={};jumps=QPainterPath();last=None;block=0
+            # Draw thread thickness (0.4 mm) like real embroidery: a darker
+            # thread body with a light sheen. Short chunks are drawn in sewing
+            # order, so later rows cover underlay and travel just as on fabric.
+            chunks=[];jumps=QPainterPath();last=None;block=0;path=None;count=0
             for x,y,c in self.pattern.stitches:
                 cmd=c&emb.COMMAND_MASK
-                if cmd==emb.COLOR_CHANGE:block+=1
+                if cmd==emb.COLOR_CHANGE:block+=1;path=None
                 if last is not None and cmd==emb.STITCH:
-                    path=paths.setdefault(block,QPainterPath());path.moveTo(*last);path.lineTo(x,y)
-                elif last is not None and cmd==emb.JUMP:jumps.moveTo(*last);jumps.lineTo(x,y)
+                    if path is None or count>=40:
+                        path=QPainterPath();chunks.append((block,path));count=0
+                    path.moveTo(*last);path.lineTo(x,y);count+=1
+                elif last is not None and cmd==emb.JUMP:jumps.moveTo(*last);jumps.lineTo(x,y);path=None
                 if cmd in (emb.STITCH,emb.JUMP):last=(x,y)
-            for i,path in paths.items():
-                t=self.pattern.threadlist[min(i,len(self.pattern.threadlist)-1)] if self.pattern.threadlist else emb.EmbThread('#263b53')
-                pen=QPen(QColor(t.get_red(),t.get_green(),t.get_blue()),1.4);pen.setCosmetic(True);scene.addPath(path,pen)
+            pens={}
+            for i,path in chunks:
+                if i not in pens:
+                    t=self.pattern.threadlist[min(i,len(self.pattern.threadlist)-1)] if self.pattern.threadlist else emb.EmbThread('#263b53')
+                    colour=QColor(t.get_red(),t.get_green(),t.get_blue())
+                    pens[i]=[QPen(shade,width,Qt.PenStyle.SolidLine,Qt.PenCapStyle.RoundCap,Qt.PenJoinStyle.RoundJoin) for width,shade in ((4.,colour.darker(122)),(1.5,colour.lighter(115)))]
+                for pen in pens[i]:scene.addPath(path,pen)
             if self.show_jumps.isChecked():
                 pen=QPen(QColor('#bb31b3'),1,Qt.PenStyle.DashLine);pen.setCosmetic(True);scene.addPath(jumps,pen)
             for i in self.selected:

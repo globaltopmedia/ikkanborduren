@@ -159,6 +159,10 @@ def _object_tasks(obj):
     if kind in ('fill','both','satin_fill'):
         # Satin fill follows the chosen direction everywhere, also in thin strokes.
         wide,narrow=(mask,np.zeros_like(mask)) if kind=='satin_fill' else line_fill.split_narrow(mask,round(float(obj.get('narrow_mm',1.8))*5))
+        # A mostly wide area keeps one stitch direction everywhere: thin necks
+        # and tips are sewn with the same tatami rows. Only line work (mostly
+        # thin) gets satin that follows the stroke.
+        if kind!='satin_fill' and narrow.sum()<.5*mask.sum():wide,narrow=mask,np.zeros_like(mask)
         if narrow.any() or kind=='satin_fill':
             tasks=_split_tasks(obj,kind,mask,wide,narrow,world)
             if obj.get('fabric_underlay'):tasks=_fabric_underlay(obj)+tasks
@@ -206,7 +210,7 @@ def _object_tasks(obj):
     for record in p.extras.get('route',[]):
         run=[]
         def finish_run():
-            if run:tasks.append(dict(points=world(run),layer=record['layer'],closed=False,component=record['component']))
+            if run:tasks.append(dict(points=world(run),layer=record['layer'],closed=False,component=record['component'],fixed=record.get('fixed',False)))
         for x,y,cmd in p.stitches[record['start']:record['end']]:
             cmd &= emb.COMMAND_MASK
             if cmd==emb.STITCH:run.append((x/10+mask.shape[1]/20,y/10+mask.shape[0]/20))
@@ -239,7 +243,7 @@ def _core_tasks(obj,mask,mode,world,component=None):
             cmd&=emb.COMMAND_MASK
             if cmd==emb.STITCH:run.append((x/10+mask.shape[1]/20,y/10+mask.shape[0]/20))
             elif run:
-                tasks.append(dict(points=world(run),layer=record['layer'],closed=False,component=record['component'] if component is None else component));run=[]
+                tasks.append(dict(points=world(run),layer=record['layer'],closed=False,component=record['component'] if component is None else component,fixed=record.get('fixed',False)));run=[]
     return tasks
 
 def _split_tasks(obj,kind,mask,wide,narrow,world):
@@ -571,7 +575,7 @@ def digitize_objects(objects,progress=None,optimize=True,min_jump=1.5,manual_ord
             if ends_near and len(same_stage)>1 and any(min(math.dist(exit_hint,u['points'][0]),math.dist(exit_hint,u['points'][-1]))>=.15 for u in same_stage):continue
             hint=obj.get('entry_hint') if remaining[i]==initial_remaining[i] else None
             reference=tuple(hint) if hint is not None else last
-            pts=t['points'];d0=math.dist(reference,pts[0]);d1=math.dist(reference,pts[-1]);reverse=d1<d0
+            pts=t['points'];d0=math.dist(reference,pts[0]);d1=math.dist(reference,pts[-1]);reverse=d1<d0 and not t.get('fixed')
             if obj.get('route_reversed') and hint is None:reverse=True
             if exit_hint is not None and len(same_stage)==1 and hint is None:reverse=math.dist(exit_hint,pts[0])<math.dist(exit_hint,pts[-1])
             entry=0;distance=d1 if reverse else d0

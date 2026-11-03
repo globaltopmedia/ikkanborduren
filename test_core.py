@@ -138,7 +138,11 @@ def test_tatami_fill_rows_are_staggered_and_have_no_micro_segments():
         row_x.append(sorted(x for x,yy in pts if yy==y))
     assert row_x[0][1:-1] != row_x[1][1:-1]
     assert row_x[1][1:-1] != row_x[2][1:-1]
-    assert min(math.dist(a,b) for a,b in zip(pts,pts[1:])) >= 7.99
+    # Stitches inside a row stay >= 0.8 mm; the turn at the edge is exactly
+    # one row spacing, so rows end neatly at the outline.
+    assert min(math.dist(a,b) for a,b in zip(pts,pts[1:]) if a[1]==b[1]) >= 7.99
+    assert min(math.dist(a,b) for a,b in zip(pts,pts[1:])) >= 4.99
+    assert sum(a[1]!=b[1] for a,b in zip(pts,pts[1:]))==3
     assert max(math.dist(a,b) for a,b in zip(pts,pts[1:])) <= 25.001
 
 

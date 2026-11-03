@@ -1,0 +1,14 @@
+Ikkanborduren 2.7.1 — nettere tatami (zoals Bernina DesignerPlus)
+
+- Een vlak heeft overal dezelfde steekrichting. Smalle halsjes en puntjes van
+  een breed vlak krijgen niet langer een eigen satijnstukje in een andere
+  richting; alleen echte lijnen (vlak voor meer dan de helft smal) krijgen
+  satijn die de lijn volgt.
+- Rijen sluiten netjes aan: iedere rij eindigt op de rand en de volgende rij
+  begint daarnaast (geen V-vormige overslagen meer).
+- Rond gaten wordt het vlak in vaste volgorde als een doorlopend pad
+  geborduurd. Verbindingssteken lopen langs de rand of door nog te vullen
+  deel, zodat ze onder latere rijen verdwijnen. Ook de onderlaag volgt dit.
+- Het voorbeeld toont de draad op ware dikte (0,4 mm) met glans, in
+  borduurvolgorde: onderlaag en verbindingen verdwijnen onder de bovensteek,
+  zoals op de stof.
