@@ -102,6 +102,7 @@ class PartEditUI:
         row = QHBoxLayout(); lay.addLayout(row)
         self.button(row, 'Groeperen', self.group_parts); self.button(row, 'Groep losmaken', self.ungroup_parts)
         self.button(lay, 'Mes: onderdeel in delen snijden', self.start_knife)
+        self.button(lay, 'Lassen: aanrakende vlakken (zelfde kleur) samenvoegen', self.weld_parts)
         self.part_live = QCheckBox('Steken direct opnieuw maken na een wijziging'); self.part_live.setChecked(True); lay.addWidget(self.part_live)
         dock_layout = self.parts_list.parentWidget().layout(); dock_layout.insertWidget(dock_layout.indexOf(self.parts_list) + 1, box)
         self.part_box = box
@@ -116,6 +117,7 @@ class PartEditUI:
             action = QAction('Mes', self); action.setShortcut(QKeySequence('K')); action.triggered.connect(self.start_knife); toolbar.addAction(action)
             action = QAction('Groeperen', self); action.setShortcut(QKeySequence('Ctrl+G')); action.triggered.connect(self.group_parts); toolbar.addAction(action)
             action = QAction('Groep losmaken', self); action.setShortcut(QKeySequence('Ctrl+Shift+G')); action.triggered.connect(self.ungroup_parts); toolbar.addAction(action)
+            action = QAction('Lassen', self); action.setShortcut(QKeySequence('Ctrl+L')); action.triggered.connect(self.weld_parts); toolbar.addAction(action)
         from action_icons import install_icons
         install_icons(self)
 
@@ -389,6 +391,26 @@ class PartEditUI:
         for i in range(self.parts_list.count()):
             item = self.parts_list.item(i); group = names.get(item.data(Qt.ItemDataRole.UserRole))
             if group and not item.text().endswith(']'):item.setText(item.text() + f'   [{group}]')
+
+    # Lassen ------------------------------------------------------------
+    def weld_parts(self):
+        if self.worker and self.worker.isRunning():return
+        targets = [o for o in self.part_targets() if o.get('closed', True)]
+        if len(targets) < 2:return self.error('Selecteer eerst twee of meer vlakken in dezelfde kleur (Ctrl+klik of sleep een rechthoek), dan Lassen.')
+        try:pieces = design.weld_objects(targets)
+        except ValueError as e:return self.error(e)
+        self.checkpoint(); ids = {o['id'] for o in targets}; result = []; placed = False
+        for obj in self.objects:
+            if obj['id'] not in ids:result.append(obj)
+            elif not placed:result.extend(pieces); placed = True
+        self.objects = result; new_ids = {p['id'] for p in pieces}
+        if self.generation_scope is not None:self.generation_scope = sorted((set(self.generation_scope) - ids) | new_ids)
+        self.selected_object_ids = new_ids; self.selected_object = pieces[0]['id']; self.selected.clear()
+        self.mark_objects_changed(); self.sync_object_controls(); self.refresh()
+        apart = len(pieces) - 1
+        message = (f'Gelast: {len(targets)} vlakken zijn nu {len(pieces)} onderdelen; {apart} deel/delen raakten de rest niet en bleven los.' if apart
+                   else f'Gelast: {len(targets)} vlakken zijn nu één onderdeel en worden zonder sprong geborduurd.')
+        self.regenerate_after_edit(message)
 
     # Mes ---------------------------------------------------------------
     def start_knife(self):

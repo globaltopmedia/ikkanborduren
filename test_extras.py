@@ -29,7 +29,8 @@ def test_run_corner_distribution_avoids_tiny_grid_remnants():
 
 @pytest.mark.parametrize('arc',[-120,0,120])
 def test_letters_holes_curve_and_export(app,arc,tmp_path):
-    family='DejaVu Sans' if 'DejaVu Sans' in QFontDatabase.families() else QFontDatabase.families()[0]
+    families=QFontDatabase.families()
+    family=next((f for f in ('DejaVu Sans','Arial','Helvetica','Segoe UI','Liberation Sans') if f in families),families[0])
     objects=lettering.text_objects('BO',family,12,arc,1,fill='fill',spacing=.45,length=2.5,underlay=False)
     assert len(objects)>=2 and sum(len(o['holes']) for o in objects)>=3
     assert all(o['text']=='BO' for o in objects)

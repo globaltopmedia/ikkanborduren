@@ -223,3 +223,60 @@ def test_gui_group_ungroup_and_knife(monkeypatch):
     assert len(w.objects) == 4 and 'C deel 2' in names and not errors
     w.undo(); assert len(w.objects) == 3
     w.close()
+
+
+def square_at(x0, y0, x1, y1, color='#111111', name='V'):
+    return design.new_object([dict(x=x0, y=y0), dict(x=x1, y=y0), dict(x=x1, y=y1), dict(x=x0, y=y1)], color, name, fill='fill')
+
+
+def test_weld_merges_touching_parts_of_one_colour():
+    a = square_at(0, 0, 10, 10); b = square_at(10, 0, 20, 10); far = square_at(40, 0, 45, 5)
+    pieces = design.weld_objects([a, b, far])
+    assert len(pieces) == 2 and pieces[0]['id'] in (a['id'], b['id'])
+    x0, y0, x1, y1 = design.object_bounds(pieces[0])
+    assert x0 == pytest.approx(0, abs=.15) and x1 == pytest.approx(20, abs=.15) and y1 == pytest.approx(10, abs=.15)
+    p = design.digitize_objects(pieces[:1])
+    assert sum((s[2] & emb.COMMAND_MASK) == emb.JUMP for s in p.stitches) == 1   # one part, no jump inside
+    # a hair-line gap (0.2 mm) is closed as well
+    assert len(design.weld_objects([square_at(0, 0, 10, 10), square_at(10.2, 0, 20, 10)])) == 1
+    with pytest.raises(ValueError):design.weld_objects([a, square_at(10, 0, 20, 10, color='#ff0000')])
+
+
+def test_colours_are_sewn_in_one_block_each_whatever_the_click_order():
+    import random
+    colours = ['#000000', '#ffd400', '#3a7bd5']
+    objects = []
+    for row in range(4):                      # a strip of touching tiles, colours alternating
+        for col in range(6):
+            objects.append(square_at(col * 8, row * 8, col * 8 + 8, row * 8 + 8, colours[(row + col) % 3], f'T{row}{col}'))
+    random.Random(4).shuffle(objects)
+    p = design.digitize_objects(objects)
+    threads = [t.hex_color() for t in p.threadlist]
+    assert len(threads) == 3                  # one block per colour, not one per click
+    assert threads[0] == '#ffd400' and threads[-1] == '#000000'   # light first, dark outline colour last
+
+
+def test_real_overlap_still_keeps_layer_order():
+    face = square_at(0, 0, 30, 30, '#000000', 'Gezicht')
+    nose = square_at(10, 10, 20, 20, '#ffffff', 'Neus')   # lies on top: must be sewn after the face
+    p = design.digitize_objects([face, nose])
+    assert [t.hex_color() for t in p.threadlist] == ['#000000', '#ffffff']
+
+
+def test_gui_weld(monkeypatch):
+    from PySide6.QtWidgets import QApplication, QMessageBox
+    app = QApplication.instance() or QApplication([])
+    errors = []
+    monkeypatch.setattr(QMessageBox, 'warning', lambda *a: errors.append(a[2]) or 0)
+    from studio2 import Studio2
+    w = Studio2()
+    a = square_at(0, 0, 10, 10, '#222222', 'A'); b = square_at(10, 0, 20, 10, '#222222', 'B'); c = square_at(0, 20, 10, 30, '#cc0000', 'C')
+    w.objects = [a, b, c]; w.part_live.setChecked(False); w.refresh()
+    w.select_part(a['id']); w.select_part(b['id'], add=True)
+    w.weld_parts()
+    assert not errors and len(w.objects) == 2 and w.objects[1]['id'] == c['id']
+    assert 'Gelast' in w.status.text()
+    w.undo(); assert len(w.objects) == 3
+    w.select_part(a['id']); w.select_part(c['id'], add=True); w.weld_parts()
+    assert errors and 'dezelfde garenkleur' in str(errors[-1])
+    w.close()

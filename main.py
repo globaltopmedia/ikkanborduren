@@ -241,7 +241,12 @@ class Studio(QMainWindow):
                     colors=emb.EmbPattern()
                     with open(Path(path).with_suffix('.inf'),'rb') as inf:emb.InfReader.read(inf,colors)
                     self.pattern.threadlist=colors.threadlist
-                if not self.pattern.threadlist:self.pattern.add_thread('#2B6777')
+                # Without colour information every colour block still gets its
+                # own recognisable thread, so the blocks can be told apart.
+                blocks=1+sum((s[2]&emb.COMMAND_MASK)==emb.COLOR_CHANGE for s in self.pattern.stitches)
+                defaults=['#2B6777','#E0592A','#3E9A4F','#C9A227','#7A4FB5','#D6457E','#2F8FCF','#8C6239','#555555','#E8A0B4']
+                for i in range(len(self.pattern.threadlist),blocks):
+                    self.pattern.add_thread({'color':defaults[i%len(defaults)],'description':f'Kleur {i+1} (onbekend)'})
                 self.image=None;self.source=None;self.palette=[];self.path=None
                 self.width.setValue(max(5,core.pattern_stats(self.pattern)['width']))
             else:

@@ -257,7 +257,8 @@ def nearest_entry(tasks,reference,pending):
     if choice is None:raise ValueError('Geen beschikbaar volgend detail.')
     return choice
 
-def digitize(image,palette,width_mm=100,spacing=.45,max_stitch=2.5,underlay=True,vertical=False,progress=None,mode='fill',satin_width=3,center_output=True):
+def digitize(image,palette,width_mm=100,spacing=.45,max_stitch=2.5,underlay=True,vertical=False,progress=None,mode='fill',satin_width=3,center_output=True,start=None):
+    """start: optional pixel (x, y) where sewing should begin (closest connection)."""
     if not (0.3<=spacing<=1.5):raise ValueError('Rijafstand moet 0,30–1,50 mm zijn.')
     if not (1<=max_stitch<=5):raise ValueError('Steeklengte moet 1–5 mm zijn.')
     if not (.5<=satin_width<=5):raise ValueError('Satijnbreedte moet 0,5–5 mm zijn.')
@@ -315,12 +316,12 @@ def digitize(image,palette,width_mm=100,spacing=.45,max_stitch=2.5,underlay=True
                 if underlay and region.sum()>1800 and min(region.shape)>=24:
                     local=ndimage.binary_erosion(region,iterations=3)
                     groups=_spans(local,24)
-                    ordered=_ordered_fill(local,travel,groups,max_stitch,ox,oy,24) if len(groups)>1 else None
+                    ordered=_ordered_fill(local,travel,groups,max_stitch,ox,oy,24,start) if len(groups)>1 else None
                     if ordered:task(ordered,'under');tasks[-1]['fixed']=True
                     else:
                         for rows in groups:task(_fill_points(rows,max_stitch,ox,oy),'under')
                 groups=_spans(region,spacing*10)
-                ordered=_ordered_fill(region,travel,groups,max_stitch,ox,oy,spacing*10) if len(groups)>1 else None
+                ordered=_ordered_fill(region,travel,groups,max_stitch,ox,oy,spacing*10,start) if len(groups)>1 else None
                 if ordered:task(ordered,'top');tasks[-1]['fixed']=True
                 else:
                     for rows in groups:task(_fill_points(rows,max_stitch,ox,oy),'top')
@@ -332,7 +333,7 @@ def digitize(image,palette,width_mm=100,spacing=.45,max_stitch=2.5,underlay=True
         from continuous_route import inside_path
         while tasks:
             eligible=[t for t in tasks if active_component is None or t['component']==active_component]
-            reference=last if last is not None else (mw/2,mh/2)
+            reference=last if last is not None else (tuple(start) if start is not None else (mw/2,mh/2))
             distance,i,entry=nearest_entry(eligible,reference,pending);t=eligible[i];tasks.pop(next(n for n,u in enumerate(tasks) if u is t));active_component=t['component'];points=t['points']
             if t['closed']:
                 points=points[entry:]+points[:entry];points=points+[points[0]]

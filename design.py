@@ -155,6 +155,9 @@ def _object_tasks(obj):
     if kind=='column':return _column_tasks(obj)
     if len(obj.get('direction_guides') or [])>=2 and kind in ('fill','both','satin_fill'):return _guided_tasks(obj)
     angle=float(obj.get('angle',0));mask,lo,(c,s)=raster_object(obj,angle)
+    if obj.get('start_hint') is not None:
+        # Closest connection: begin where the previous part of this colour ended.
+        X,Y=obj['start_hint'];obj=obj|{'_start_px':((c*X+s*Y-lo[0])*10,(-s*X+c*Y-lo[1])*10)}
     def world(points):return [(c*(x+lo[0])+(-s)*(y+lo[1]),s*(x+lo[0])+c*(y+lo[1])) for x,y in points]
     if kind in ('fill','both','satin_fill'):
         # Satin fill follows the chosen direction everywhere, also in thin strokes.
@@ -202,7 +205,7 @@ def _object_tasks(obj):
     # Keep the raster coordinate origin so separately drawn objects retain their positions.
     try:
         p=core.digitize(Image.fromarray(rgba),[rgb],width_mm=mask.shape[1]/10,spacing=min(1.5,float(obj['spacing'])),
-            max_stitch=max(1,limit),underlay=obj.get('underlay',True),mode=kind,satin_width=float(obj['satin']),center_output=False)
+            max_stitch=max(1,limit),underlay=obj.get('underlay',True),mode=kind,satin_width=float(obj['satin']),center_output=False,start=obj.get('_start_px'))
     except ValueError as e:
         if 'Geen steken gegenereerd' in str(e):
             return _object_tasks(obj|{'fill':'run'})
@@ -233,7 +236,7 @@ def _core_tasks(obj,mask,mode,world,component=None):
     rgba=np.zeros((*mask.shape,4),np.uint8);rgb=tuple(int(obj['color'][i:i+2],16) for i in (1,3,5));rgba[:,:,:3]=rgb;rgba[:,:,3]=mask*255
     try:
         p=core.digitize(Image.fromarray(rgba),[rgb],width_mm=mask.shape[1]/10,spacing=min(1.5,float(obj['spacing'])),
-            max_stitch=max(1,limit),underlay=obj.get('underlay',True),mode=mode,satin_width=float(obj['satin']),center_output=False)
+            max_stitch=max(1,limit),underlay=obj.get('underlay',True),mode=mode,satin_width=float(obj['satin']),center_output=False,start=obj.get('_start_px'))
     except ValueError as e:
         if 'Geen steken gegenereerd' in str(e) or 'geen zichtbare' in str(e).lower():return tasks
         raise
@@ -337,6 +340,37 @@ def split_object(obj,line,gap_mm=.2,extend_mm=4):
             except ValueError:continue
             out.append(piece)
     if len(out)<2:raise ValueError(f'De lijn snijdt {obj["name"]} niet in twee bruikbare delen.')
+    return out
+
+def weld_objects(objs,gap_mm=.3):
+    """Lassen: merge parts of one colour into one part wherever they touch or
+    overlap (gaps up to gap_mm are closed). Parts that do not touch stay
+    separate pieces. The largest part keeps its id and stitch settings."""
+    objs=[o for o in objs if o.get('closed',True)]
+    if len(objs)<2:raise ValueError('Kies twee of meer vlakken om te lassen.')
+    if len({o['color'].lower() for o in objs})>1:raise ValueError('Lassen werkt op onderdelen in dezelfde garenkleur. Geef ze eerst dezelfde kleur.')
+    rasters=[raster_object(o,0,compensate=False)[:2] for o in objs]
+    lo=np.min([r[1] for r in rasters],axis=0);hi=np.max([r[1]+np.array(r[0].shape[::-1])/10 for r in rasters],axis=0)
+    size=np.ceil((hi-lo)*10).astype(int)+2;union=np.zeros((size[1],size[0]),bool)
+    for mask,origin in rasters:
+        x,y=np.rint((origin-lo)*10).astype(int);union[y:y+mask.shape[0],x:x+mask.shape[1]]|=mask
+    reach=max(1,round(gap_mm*10/2))
+    joined=ndimage.binary_closing(np.pad(union,reach+1),iterations=reach)[reach+1:-reach-1,reach+1:-reach-1]|union
+    areas=[m.sum() for m,_ in rasters];base=objs[int(np.argmax(areas))];out=[]
+    labels,n=ndimage.label(joined)
+    order=np.argsort(ndimage.sum(joined,labels,range(1,n+1)))[::-1] if n else []
+    for k in order:
+        region=labels==k+1
+        if region.sum()<30:continue
+        for outer,holes in _mask_shapes(region):
+            ring=lambda r:[dict(x=float(x/10+lo[0]),y=float(y/10+lo[1]),kind='corner') for x,y in r]
+            piece=copy.deepcopy(base);piece.update(nodes=ring(outer),holes=[ring(h) for h in holes],overlap_exclusions=[],direction_guides=[])
+            for key in ('overlap_satin_source','entry_hint','exit_hint','group_id','group_name'):piece.pop(key,None)
+            if out:piece['id']=uuid.uuid4().hex;piece['name']=f'{base["name"]} deel {len(out)+1}'
+            try:validate_object(piece)
+            except ValueError:continue
+            out.append(piece)
+    if not out:raise ValueError('Lassen gaf geen bruikbaar vlak.')
     return out
 
 def _guided_tasks(obj):
@@ -444,6 +478,67 @@ def _objects_overlap(a,b,cache):
     left=am[aa[1]:aa[1]+h,aa[0]:aa[0]+w];right=bm[bb[1]:bb[1]+h,bb[0]:bb[0]+w]
     return bool(np.any(left & right))
 
+def _objects_cover(a,b,cache):
+    """True when one part really lies on top of the other.
+
+    Parts traced from one picture (magic wand) only touch along their edges;
+    with fill allowance they overlap by a hair. That seam must not fix the
+    sewing order, otherwise colours alternate in click order."""
+    if not _bbox_overlap(a,b):return False
+    if not a.get('closed',True) or not b.get('closed',True):return _objects_overlap(a,b,cache)
+    key='cover'
+    for obj in (a,b):
+        if (key,obj['id']) not in cache:
+            mask,lo,_=raster_object(obj,compensate=False)
+            cache[(key,obj['id'])]=(ndimage.binary_erosion(mask,iterations=2),lo,int(mask.sum()))
+    am,ao,aa_=cache[(key,a['id'])];bm,bo,ba_=cache[(key,b['id'])]
+    lo=np.maximum(ao,bo);hi=np.minimum(ao+(np.array(am.shape[::-1])-1)/10,bo+(np.array(bm.shape[::-1])-1)/10)
+    size=np.floor((hi-lo)*10+.001).astype(int)+1
+    if (size<=0).any():return False
+    pa=np.rint((lo-ao)*10).astype(int);pb=np.rint((lo-bo)*10).astype(int);w,h=size
+    shared=int(np.count_nonzero(am[pa[1]:pa[1]+h,pa[0]:pa[0]+w]&bm[pb[1]:pb[1]+h,pb[0]:pb[0]+w]))
+    return shared>=max(4,.03*min(aa_,ba_))
+
+def _lightness(colour):
+    r,g,b=(int(colour[i:i+2],16) for i in (1,3,5));return .299*r+.587*g+.114*b
+
+def _colour_tours(objects):
+    """Per thread colour a short open tour through its parts (nearest
+    neighbour + 2-opt on edge-to-edge distances): {object index: rank}."""
+    by_colour={}
+    for i,obj in enumerate(objects):by_colour.setdefault(obj['color'],[]).append(i)
+    rank={};size={}
+    for colour,members in by_colour.items():
+        n=len(members);size[colour]=n
+        if n<3:
+            for k,i in enumerate(members):rank[i]=k
+            continue
+        from scipy.spatial import cKDTree
+        rings=[np.asarray(flattened(objects[i]['nodes'],objects[i].get('closed',True),step=.5)) for i in members]
+        trees=[cKDTree(r) for r in rings];centre=np.array([r.mean(axis=0) for r in rings])
+        d=np.zeros((n,n))
+        for a in range(n):
+            for b in range(a+1,n):
+                small,big=(a,b) if len(rings[a])<len(rings[b]) else (b,a)
+                d[a,b]=d[b,a]=float(trees[big].query(rings[small])[0].min())
+        def length(t):return float(sum(d[a,b] for a,b in zip(t,t[1:])))
+        best=None
+        for start in range(n) if n<=60 else np.argsort(centre[:,0])[:: max(1,n//40)]:
+            tour=[int(start)];left=set(range(n))-{int(start)}
+            while left:
+                nxt=min(left,key=lambda j:d[tour[-1],j]);tour.append(nxt);left.remove(nxt)
+            if best is None or length(tour)<length(best):best=tour
+        improved=True;rounds=0
+        while improved and rounds<50:
+            improved=False;rounds+=1
+            for a in range(n-2):
+                for b in range(a+2,n):
+                    before=d[best[a],best[a+1]]+(d[best[b],best[b+1]] if b+1<n else 0)
+                    after=d[best[a],best[b]]+(d[best[a+1],best[b+1]] if b+1<n else 0)
+                    if after<before-1e-9:best[a+1:b+1]=best[a+1:b+1][::-1];improved=True
+        for k,j in enumerate(best):rank[members[j]]=k
+    return rank,size
+
 def logical_objects(objects):
     objects=copy.deepcopy(objects);groups={};order=[]
     for obj in objects:
@@ -520,8 +615,27 @@ def digitize_objects(objects,progress=None,optimize=True,min_jump=1.5,manual_ord
     if fabric_key:objects=fabric.apply(objects,fabric_key)
     if not objects:raise ValueError('Teken of importeer eerst een vlak.')
     tasks=[];deps={};remaining={}
-    for i,obj in enumerate(objects):
-        if progress:progress(int(i*55/len(objects)),f'Steken voor {obj["name"]}')
+    # Plan: lightest colour first, each colour along a short tour; every part
+    # starts where the previous one ended (closest connection).
+    tour_rank,tour_size=_colour_tours(objects)
+    # Walk each colour's tour from the end nearest to where the previous colour
+    # stopped (the needle starts in the middle of the hoop).
+    def centre(i):
+        b=object_bounds(objects[i]);return ((b[0]+b[2])/2,(b[1]+b[3])/2)
+    reference=(0.,0.)
+    for colour in sorted(tour_size,key=lambda c:-_lightness(c)):
+        members=sorted((i for i in tour_rank if objects[i]['color']==colour),key=lambda i:tour_rank[i])
+        if math.dist(reference,centre(members[-1]))<math.dist(reference,centre(members[0])):
+            for k,i in enumerate(reversed(members)):tour_rank[i]=k
+            members.reverse()
+        reference=centre(members[-1])
+    plan=list(range(len(objects)))
+    if optimize and not manual_order:plan.sort(key=lambda i:(-_lightness(objects[i]['color']),objects[i]['color'],tour_rank[i]))
+    previous_end=None
+    for step,i in enumerate(plan):
+        obj=objects[i]
+        if previous_end is not None and optimize and not manual_order and not obj.get('entry_hint'):obj=obj|{'start_hint':previous_end}
+        if progress:progress(int(step*55/len(objects)),f'Steken voor {obj["name"]}')
         local=_object_tasks(obj|{'overlap_exclusions':[]} if obj.get('overlap_exclusions') and obj.get('fill') in ('satin','zigzag') else obj)
         if obj.get('overlap_satin_source') and obj.get('fill')=='both':
             source=obj|obj['overlap_satin_source']|dict(fill='satin',underlay=False,fabric_underlay=None,overlap_exclusions=[])
@@ -540,6 +654,7 @@ def digitize_objects(objects,progress=None,optimize=True,min_jump=1.5,manual_ord
         deps[i]=set()
         remaining[i]=len(local)
         for task in local:task.update(object=i,color=obj['color'],id=obj['id']);tasks.append(task)
+        if local:previous_end=tuple(local[-1]['points'][-1])
     # Explicit point/line phases override layer order only where the shapes
     # overlap. Uniform unit ranks keep a whole letter from getting deadlocked
     # on another letter's body/point dependency.
@@ -550,7 +665,7 @@ def digitize_objects(objects,progress=None,optimize=True,min_jump=1.5,manual_ord
     for i,obj in enumerate(objects):
         a=obj.get('letter_id',obj['id'])
         for j in range(i):
-            if not _objects_overlap(obj,objects[j],overlap_cache):continue
+            if not _objects_cover(obj,objects[j],overlap_cache):continue
             b=objects[j].get('letter_id',objects[j]['id'])
             if not manual_order and a!=b and unit_phase[a]<unit_phase[b]:deps[j].add(i)
             else:deps[i].add(j)
@@ -570,6 +685,10 @@ def digitize_objects(objects,progress=None,optimize=True,min_jump=1.5,manual_ord
     initial_remaining=remaining.copy()
     stops_done=set()
     active_unit=None;last_object=None;join_masks={};done_units={key for key,members in units.items() if all(i in done for i in members)}
+    tour_reverse={colour:False for colour in tour_size}
+    def tour_position(i):
+        colour=objects[i]['color'];k=tour_rank[i]
+        return tour_size[colour]-1-k if tour_reverse.get(colour) else k
     while tasks:
         available=[];first_in_unit={};stage_records={}
         for u in tasks:
@@ -602,7 +721,11 @@ def digitize_objects(objects,progress=None,optimize=True,min_jump=1.5,manual_ord
                 legal_hint=distance
             else:legal_hint=0
             actual_entry=pts[entry] if t.get('closed') else pts[-1] if reverse else pts[0]
-            available.append((0 if t['color']==color else 1,math.dist(last,actual_entry),n,reverse,entry,legal_hint if hint is not None else None,i))
+            if t['color']==color:priority=(0,0,tour_position(i))
+            else:
+                # New colour: lightest first, starting at an end of its tour.
+                priority=(1,-_lightness(t['color']),tour_rank[i])
+            available.append((priority,math.dist(last,actual_entry),n,reverse,entry,legal_hint if hint is not None else None,i))
         if not available:raise ValueError('Vlakvolgorde kon niet worden bepaald.')
         preferred={}
         for candidate in available:

@@ -1,0 +1,14 @@
+Ikkanborduren 2.7.3 — logische borduurvolgorde, lassen
+
+- Elke garenkleur wordt in één keer geborduurd (van licht naar donker, zwarte
+  omlijning als laatste). De volgorde waarin vlakken met de toverstaf zijn
+  aangeklikt maakt niet meer uit. Voorbeeld schildpad in willekeurige
+  klikvolgorde: 15 -> 6 kleurblokken, ongeveer 800 -> 611 mm springen.
+- Vlakken die alleen langs de rand aan elkaar grenzen leggen de volgorde niet
+  meer vast; alleen een onderdeel dat echt op een ander ligt blijft bovenop.
+- Dichtstbijzijnde verbinden: binnen een kleur volgt de naald de kortste route
+  langs de vlakken en begint elk vlak bij het eind van het vorige.
+- Nieuw: Lassen (Ctrl+L). Selecteer vlakken in dezelfde kleur; vlakken die
+  elkaar raken worden één onderdeel dat zonder sprong wordt geborduurd.
+- EXP zonder .inf: elk kleurblok krijgt een eigen herkenbare kleur in plaats
+  van alles in één kleur.

@@ -1,4 +1,4 @@
-IKKANBORDUREN 2.7.2 — Windows-pakket
+IKKANBORDUREN 2.7.3 — Windows-pakket
 ======================================
 
 Lees HANDLEIDING.html (dubbelklikken) voor alle functies en hoe je ze gebruikt.
@@ -8,7 +8,7 @@ Nieuw in 2.6: toverstaf, automatisch borduren, rand rondom het ontwerp,
 dubbele stiklijn, applicaties en het borduurraam op ware grootte.
 
 Installeren
-1. Pak het zip-bestand (Ikkanborduren_2.7.2_Windows.zip) volledig uit naar een vaste map op de laptop.
+1. Pak het zip-bestand (Ikkanborduren_2.7.3_Windows.zip) volledig uit naar een vaste map op de laptop.
 2. Installeer Python 3.13 (64-bit) vanaf https://www.python.org/downloads/windows/ als dat nog niet aanwezig is.
    Vink tijdens de installatie 'Add Python to PATH' aan.
 3. Dubbelklik op Installatie_Ikkanborduren.bat en wacht tot de installatie klaar is.
